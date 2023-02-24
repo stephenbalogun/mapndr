@@ -22,3 +22,5 @@ Imports:
     tidyr,
     tidyselect
 RoxygenNote: 7.2.3
+URL: https://github.com/stephenbalogun/mapndr
+BugReports: https://github.com/stephenbalogun/mapndr/issues
