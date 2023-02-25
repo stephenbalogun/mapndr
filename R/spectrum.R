@@ -8,7 +8,12 @@
 #' @return rectangular data of interest
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#' ## get Abia state spectrum estimate for the different age-bands and gender in 2022
+#' abia_2022 <- spectrum(year = 2022, state = "Abia")
+#'
+#' ## get spectrum estimate for Adamawa and Rivers in 2023
+#' ada_riv_2023 <- spectrum(year = 2023, state = c("Adamawa", "Rivers"))
 
 spectrum <- function(major = 6, minor = 19, year = 2022, state = NULL) {
 
