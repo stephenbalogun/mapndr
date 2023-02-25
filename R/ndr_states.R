@@ -5,7 +5,14 @@
 #' @return coordinates of selected states
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## get the coordinates of Zamfara state
+#'
+#' zam_coord <- ndr_states("Zamfara")
+#'
+#' ## get the coordinates of Bayelsa and Ebonyi states
+#' bay_ebo_coords <- ndr_states(c("Bayelsa", "Ebonyi"))
 ndr_states <- function(state) {
   state <- stringr::str_replace_all(state, "FCT", "Federal Capital Territory")
 

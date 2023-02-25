@@ -16,5 +16,11 @@ coordinates of selected states
 Coordinates of Nigeria States
 }
 \examples{
-NULL
+
+## get the coordinates of Zamfara state
+
+zam_coord <- ndr_states("Zamfara")
+
+## get the coordinates of Bayelsa and Ebonyi states
+bay_ebo_coords <- ndr_states(c("Bayelsa", "Ebonyi"))
 }
