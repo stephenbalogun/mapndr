@@ -29,6 +29,8 @@ map_states3 <- function(
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
+  noise <- stats::runif(1, min = 0.05, max = 0.1)
+
   df <- ndr_states(states) |>
     dplyr::left_join(
       .data,
@@ -45,46 +47,70 @@ map_states3 <- function(
       {{ dark_b }} := dplyr::first({{ dark_b }}),
       {{ light_b }} := dplyr::first({{ light_b }}),
       .groups = "drop"
+    ) |>
+    dplyr::mutate(
+      long2 = .data$long + (2 * noise),
+      lat2 = .data$lat + (2 * noise)
     )
 
-  noise <- stats::runif(1, max = 0.1)
-
-  p <- df |>
-    ggplot2::ggplot(
-      ggplot2::aes(.data$long, .data$lat, group = .data$group)
-    ) +
-    ggplot2::geom_polygon(
-      ggplot2::aes(fill = {{ fill }}),
-      color = "black",
-      linewidth = 0.8
-    ) +
-    ggplot2::geom_point(
-      data = lab_data,
-      ggplot2::aes((.data$long + noise), (.data$lat + noise), size = {{ light_b }}),
-      color = "#f5c1c1",
-      show.legend = FALSE
-    ) +
-    ggplot2::geom_point(
-      data = lab_data,
-      ggplot2::aes((.data$long + noise), (.data$lat + noise), size = {{ dark_b }}),
-      color = "#ae2234",
-      show.legend = FALSE
-    ) +
-    ggplot2::coord_map() +
-    ggplot2::theme_void() +
-    ggplot2::scale_size(range = c(5, 15))
+  if (!is.null(cols) && length(cols) == 1) {
+    p <- df |>
+      ggplot2::ggplot() +
+      ggplot2::geom_polygon(
+        ggplot2::aes(.data$long, .data$lat, group = .data$group),
+        fill = cols,
+        color = "black",
+        linewidth = 0.8
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
+        color = "#f5c1c1",
+        show.legend = FALSE
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size(range = c(5, 15))
+  } else {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$group)
+      ) +
+      ggplot2::geom_polygon(
+        ggplot2::aes(fill = {{ fill }}),
+        color = "black",
+        linewidth = 0.8
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
+        color = "#f5c1c1",
+        show.legend = FALSE
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ dark_b }}),
+        color = "#ae2234",
+        show.legend = FALSE
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size(range = c(5, 15))
+  }
 
 
   if (label) {
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long, .data$lat, label = .data$state),
-        size = size %||% 3
+        ggplot2::aes(.data$long2, .data$lat2, label = .data$state),
+        size = size %||% 3,
+        check_overlap = TRUE
       ) +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long + (3 * noise), .data$lat + (3 * noise), label = round({{ dark_b }})), size = size %||% 3
+        ggplot2::aes(.data$long, .data$lat, label = round({{ dark_b }})), size = size %||% 3,
+        check_overlap = TRUE
       )
   }
 

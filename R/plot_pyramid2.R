@@ -12,17 +12,17 @@
 #' ## plot 2022 spectrum estimate of Zamfara by sex and `incidence_x`
 #'
 #' pop_data <- spectrum(year = 2022, state = "Zamfara") |>
-#' dplyr::mutate(
-#' age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
-#' ) |>
-#' dplyr::group_by(state, sex, age_group) |>
-#' dplyr::summarise(
-#' estimate = sum(estimate, na.rm = TRUE),
-#' .groups = "drop"
-#' ) |>
-#' dplyr::mutate(
-#' incidence_x = round(estimate * runif(1, max = 0.3))
-#' )
+#'   dplyr::mutate(
+#'     age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
+#'   ) |>
+#'   dplyr::group_by(state, sex, age_group) |>
+#'   dplyr::summarise(
+#'     estimate = sum(estimate, na.rm = TRUE),
+#'     .groups = "drop"
+#'   ) |>
+#'   dplyr::mutate(
+#'     incidence_x = round(estimate * runif(1, max = 0.3))
+#'   )
 #'
 #' plot_pyramid2(pop_data, high_var = estimate, low_var = incidence_x)
 #'

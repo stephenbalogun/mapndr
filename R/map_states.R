@@ -32,16 +32,29 @@ map_states <- function(
       multiple = "all"
     )
 
-  p <- df |>
-    ggplot2::ggplot(
-      ggplot2::aes(.data$long, .data$lat, group = .data$group)
-    ) +
-    ggplot2::geom_polygon(
-      ggplot2::aes(fill = {{ fill }}),
-      color = "black"
-    ) +
-    ggplot2::coord_map() +
-    ggplot2::theme_void()
+  if (!is.null(cols) && length(cols) == 1) {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$group)
+      ) +
+      ggplot2::geom_polygon(
+        fill = cols,
+        color = "black"
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void()
+  } else {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$group)
+      ) +
+      ggplot2::geom_polygon(
+        ggplot2::aes(fill = {{ fill }}),
+        color = "black"
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void()
+  }
 
   if (label) {
     lab_data <- df |>

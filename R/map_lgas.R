@@ -40,16 +40,30 @@ map_lgas <- function(
       multiple = "all"
     )
 
-  p <- df |>
-    ggplot2::ggplot(
-      ggplot2::aes(.data$long, .data$lat, group = .data$lga)
-    ) +
-    ggplot2::geom_polygon(
-      ggplot2::aes(fill = {{ fill }}),
-      color = "black"
-    ) +
-    ggplot2::coord_map() +
-    ggplot2::theme_void()
+
+  if (!is.null(cols) && length(cols) == 1) {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$lga)
+      ) +
+      ggplot2::geom_polygon(
+        fill = cols,
+        color = "black"
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void()
+  } else {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$lga)
+      ) +
+      ggplot2::geom_polygon(
+        ggplot2::aes(fill = {{ fill }}),
+        color = "black"
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void()
+  }
 
   if (label) {
     lab_data <- df |>
@@ -77,7 +91,7 @@ map_lgas <- function(
 
     p <- p +
       ggplot2::scale_fill_manual(
-        values = col_select
+        values = cols %||% col_select
       )
   } else if (is.numeric(fill_vec)) {
     p <- p + ggplot2::scale_fill_viridis_c(alpha = 0.5)

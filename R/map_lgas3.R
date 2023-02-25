@@ -28,7 +28,7 @@ map_lgas3 <- function(
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
-  noise <- stats::runif(1, max = 0.03)
+  noise <- stats::runif(1, min = 0.01, max = 0.02)
 
 
   df <- ndr_lgas(states) |>
@@ -56,32 +56,61 @@ map_lgas3 <- function(
       lat2 = .data$lat + (2 * noise)
     )
 
-  p <- df |>
-    ggplot2::ggplot(
-      ggplot2::aes(.data$long, .data$lat, group = .data$lga)
-    ) +
-    ggplot2::geom_polygon(
-      ggplot2::aes(fill = {{ fill }}),
-      color = "black"
-    ) +
-    ggplot2::geom_point(
-      data = lab_data,
-      ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
-      color = "#f5c1c1",
-      show.legend = FALSE
-    ) +
-    ggplot2::geom_point(
-      data = lab_data,
-      ggplot2::aes(
-        .data$long, .data$lat,
-        size = {{ dark_b }}
-      ),
-      color = "#ae2234",
-      show.legend = FALSE
-    ) +
-    ggplot2::coord_map() +
-    ggplot2::theme_void() +
-    ggplot2::scale_size(range = c(5, 15))
+
+  if (!is.null(cols) && length(cols) == 1) {
+    p <- df |>
+      ggplot2::ggplot() +
+      ggplot2::geom_polygon(
+        ggplot2::aes(.data$long, .data$lat, group = .data$lga),
+        fill = cols,
+        color = "black"
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
+        color = "#f5c1c1",
+        show.legend = FALSE
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(
+          .data$long, .data$lat,
+          size = {{ dark_b }}
+        ),
+        color = "#ae2234",
+        show.legend = FALSE
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size(range = c(5, 15))
+  } else {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$lga)
+      ) +
+      ggplot2::geom_polygon(
+        ggplot2::aes(fill = {{ fill }}),
+        color = "black"
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
+        color = "#f5c1c1",
+        show.legend = FALSE
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(
+          .data$long, .data$lat,
+          size = {{ dark_b }}
+        ),
+        color = "#ae2234",
+        show.legend = FALSE
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size(range = c(5, 15))
+  }
 
 
   if (label) {
@@ -98,6 +127,7 @@ map_lgas3 <- function(
           .data$long, .data$lat,
           label = round({{ dark_b }})
         ),
+        color = "#ffffff",
         size = size %||% 2,
         check_overlap = TRUE
       )

@@ -44,14 +44,14 @@ Pyramid Plot of Age and Sex Data
 ## plot 2022 spectrum estimate of Zamfara by sex
 
 pop_data <- spectrum(year = 2022, state = "Zamfara") |>
-dplyr::mutate(
-age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
-) |>
-dplyr::group_by(state, sex, age_group) |>
-dplyr::summarise(
-estimate = sum(estimate, na.rm = TRUE),
-.groups = "drop"
-)
+  dplyr::mutate(
+    age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
+  ) |>
+  dplyr::group_by(state, sex, age_group) |>
+  dplyr::summarise(
+    estimate = sum(estimate, na.rm = TRUE),
+    .groups = "drop"
+  )
 
 plot_pyramid(pop_data, var = estimate)
 }

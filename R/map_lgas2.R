@@ -26,6 +26,8 @@ map_lgas2 <- function(
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
+  noise <- stats::runif(1, min = 0.01, max = 0.02)
+
   df <- ndr_lgas(states) |>
     dplyr::left_join(
       .data,
@@ -43,34 +45,62 @@ map_lgas2 <- function(
         tidyselect::where(is.numeric), mean
       ),
       .groups = "drop"
+    ) |>
+    dplyr::mutate(
+      long2 = .data$long + (2 * noise),
+      lat2 = .data$lat + (2 * noise)
     )
 
-  noise <- stats::runif(1, max = 0.03)
-
-  p <- df |>
-    ggplot2::ggplot(
-      ggplot2::aes(.data$long, .data$lat, group = .data$lga)
-    ) +
-    ggplot2::geom_polygon(
-      ggplot2::aes(fill = {{ fill }}),
-      color = "black"
-    ) +
-    ggplot2::geom_point(
-      data = lab_data,
-      ggplot2::aes((.data$long + noise), (.data$lat + noise), size = {{ bubble }}),
-      alpha = 0.3
-    ) +
-    ggplot2::coord_map() +
-    ggplot2::theme_void() +
-    ggplot2::scale_size(range = c(5, 15))
+  if (!is.null(cols) && length(cols) == 1) {
+    p <- df |>
+      ggplot2::ggplot() +
+      ggplot2::geom_polygon(
+        ggplot2::aes(.data$long, .data$lat, group = .data$lga),
+        fill = cols,
+        color = "black",
+        linewidth = 0.8
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ bubble }}),
+        alpha = 0.4
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size(range = c(5, 15))
+  } else {
+    p <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(.data$long, .data$lat, group = .data$lga)
+      ) +
+      ggplot2::geom_polygon(
+        ggplot2::aes(fill = {{ fill }}),
+        color = "black"
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ bubble }}),
+        alpha = 0.4
+      ) +
+      ggplot2::coord_map() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size(range = c(5, 15))
+  }
 
 
   if (label) {
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long, .data$lat, label = .data$lga),
+        ggplot2::aes(.data$long2, .data$lat2, label = .data$lga),
         size = size %||% 2,
+        check_overlap = TRUE
+      ) +
+      ggplot2::geom_text(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, label = {{ bubble }}),
+        size = size %||% 2,
+        color = "#ffffff",
         check_overlap = TRUE
       )
   }
