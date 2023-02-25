@@ -4,15 +4,26 @@
 \name{mapndr-package}
 \alias{mapndr}
 \alias{mapndr-package}
-\title{mapndr: What the Package Does (Title Case)}
+\title{mapndr: Mapping of Rectangular Data Tailored for the Nigeria National Data Repository}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+The package aims to simplify geospatial analysis and plotting of population pyramids of summary data from the Nigeria National Data Repository (NDR). It aligns with the naming convention for `state`, `LGA` and `sex` variables as obtained from most of the line-lists obtained from the NDR.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/stephenbalogun/mapndr}
   \item Report bugs at \url{https://github.com/stephenbalogun/mapndr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Stephen Balogun \email{stephentaiyebalogun@gmail.com} (\href{https://orcid.org/0000-0002-9928-3703}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Kehinde Balogun [contributor]
+  \item Eniola Erubami [contributor]
+  \item Henry Irabor [contributor]
 }
 
 }

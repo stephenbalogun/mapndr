@@ -7,28 +7,36 @@
 #' @return a three-dimensional LGA-level map
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## map the lga_data, filling by `prev_x` and light_b by `population` and dark_b by `incidence_x`
+#'
+#' map_lgas3(lga_data, fill = prev_x, light_b = population, dark_b = incidence_x, label = TRUE)
+#'
 map_lgas3 <- function(
     .data,
     fill,
     light_b,
     dark_b,
-    st = .data$state,
+    state = state,
     lga = lga,
     label = FALSE,
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-  states <- dplyr::distinct(.data, {{ st }}) |> dplyr::pull({{ st }})
+  states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
+
+  noise <- stats::runif(1, max = 0.03)
+
 
   df <- ndr_lgas(states) |>
     dplyr::left_join(
       .data,
       dplyr::join_by(
-        .data$state == {{ st }},
-        lga == {{ lga }}
+        {{ state }} == {{ state }},
+        {{ lga }} == {{ lga }}
       ),
       multiple = "all"
     )
@@ -42,9 +50,11 @@ map_lgas3 <- function(
       {{ dark_b }} := dplyr::first({{ dark_b }}),
       {{ light_b }} := dplyr::first({{ light_b }}),
       .groups = "drop"
+    ) |>
+    dplyr::mutate(
+      long2 = .data$long + (2 * noise),
+      lat2 = .data$lat + (2 * noise)
     )
-
-  noise <- stats::runif(1, max = 0.03)
 
   p <- df |>
     ggplot2::ggplot(
@@ -56,34 +66,36 @@ map_lgas3 <- function(
     ) +
     ggplot2::geom_point(
       data = lab_data,
-      ggplot2::aes((.data$long + noise), (.data$lat + noise), size = {{ light_b }}),
+      ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
       color = "#f5c1c1",
       show.legend = FALSE
     ) +
     ggplot2::geom_point(
       data = lab_data,
       ggplot2::aes(
-        (.data$long + noise), (.data$lat + noise),
+        .data$long, .data$lat,
         size = {{ dark_b }}
       ),
       color = "#ae2234",
       show.legend = FALSE
     ) +
     ggplot2::coord_map() +
-    ggplot2::theme_void()
+    ggplot2::theme_void() +
+    ggplot2::scale_size(range = c(5, 15))
 
 
   if (label) {
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long, .data$lat, label = .data$lga),
-        size = size %||% 2
+        ggplot2::aes(.data$long2, .data$lat2, label = .data$lga),
+        size = size %||% 2,
+        check_overlap = TRUE
       ) +
       ggplot2::geom_text(
         data = lab_data,
         ggplot2::aes(
-          .data$long + (3 * noise), .data$lat + (3 * noise),
+          .data$long, .data$lat,
           label = round({{ dark_b }})
         ),
         size = size %||% 2,

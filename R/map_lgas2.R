@@ -6,18 +6,23 @@
 #' @return a two-dimensional LGA-level map
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## map the lga_data accompanying the package, filling by `prev_x` and bubbles by `incidence_x`
+#'
+#' map_lgas2(lga_data, fill = prev_x, bubble = incidence_x, label = TRUE)
+#'
 map_lgas2 <- function(
     .data,
     fill,
     bubble,
-    st = .data$state,
+    state = state,
     lga = lga,
     label = FALSE,
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-  states <- dplyr::distinct(.data, {{ st }}) |> dplyr::pull({{ st }})
+  states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
@@ -25,8 +30,8 @@ map_lgas2 <- function(
     dplyr::left_join(
       .data,
       dplyr::join_by(
-        .data$state == {{ st }},
-        lga == {{ lga }}
+        {{ state }} == {{ state }},
+        {{ lga }} == {{ lga }}
       ),
       multiple = "all"
     )
@@ -56,7 +61,8 @@ map_lgas2 <- function(
       alpha = 0.3
     ) +
     ggplot2::coord_map() +
-    ggplot2::theme_void()
+    ggplot2::theme_void() +
+    ggplot2::scale_size(range = c(5, 15))
 
 
   if (label) {

@@ -7,7 +7,7 @@
 plot_pyramid(
   .data,
   var,
-  age_band = .data$age_group,
+  age_group = age_group,
   sex = sex,
   label = TRUE,
   cols = NULL,
@@ -20,7 +20,7 @@ plot_pyramid(
 
 \item{var}{the variable name in the data to be used to plot the pyramid}
 
-\item{age_band}{the variable name in the data that contains the different age-band}
+\item{age_group}{the variable name in the data that contains the different age-band}
 
 \item{sex}{the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR}
 
@@ -39,5 +39,19 @@ population pyramid plot
 Pyramid Plot of Age and Sex Data
 }
 \examples{
-NULL
+
+
+## plot 2022 spectrum estimate of Zamfara by sex
+
+pop_data <- spectrum(year = 2022, state = "Zamfara") |>
+dplyr::mutate(
+age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
+) |>
+dplyr::group_by(state, sex, age_group) |>
+dplyr::summarise(
+estimate = sum(estimate, na.rm = TRUE),
+.groups = "drop"
+)
+
+plot_pyramid(pop_data, var = estimate)
 }

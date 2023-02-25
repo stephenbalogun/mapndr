@@ -5,23 +5,30 @@
 #' @return state-level map
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## map 2022 spectrum estimate for "Ondo", "Oyo", "Osun" and "Ogun" states interactively
+#'
+#' state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
+#'   dplyr::count(state, wt = estimate, name = "estimate")
+#'
+#' map_states(state_data, fill = estimate, label = TRUE, interactive = TRUE)
 map_states <- function(
     .data,
     fill,
-    st = .data$state,
+    state = state,
     label = FALSE,
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-  states <- dplyr::distinct(.data, {{ st }}) |> dplyr::pull({{ st }})
+  states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
   df <- ndr_states(states) |>
     dplyr::left_join(
       .data,
-      dplyr::join_by(.data$state == {{ st }}),
+      dplyr::join_by({{ state }} == {{ state }}),
       multiple = "all"
     )
 

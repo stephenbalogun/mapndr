@@ -16,5 +16,12 @@ coordinates of selected LGAs
 Coordinates of Nigeria LGAs
 }
 \examples{
-NULL
+
+## get LGA coordinates for Gombe state
+
+gom_lga_coord <- ndr_lgas("Gombe")
+
+## get LGA coordinates for Anambra and Kogi
+ana_kog_coord <- ndr_lgas(c("Anambra", "Kogi"))
+
 }

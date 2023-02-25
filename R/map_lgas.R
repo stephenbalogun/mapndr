@@ -2,7 +2,7 @@
 #'
 #' @param .data a tabular (rectangular) data containing LGA and the variables to be plotted
 #' @param fill the variable (categorical or continuous) to be used to fill (color) the LGAs
-#' @param st the variable name of the column representing states in the data
+#' @param state the variable name of the column representing states in the data
 #' @param lga the variable name of the column representing LGAs in the data
 #' @param label logical (boolean), indicating if the LGAs should be labelled or not
 #' @param cols a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors
@@ -12,17 +12,21 @@
 #' @return LGA-level map
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## map the lga_data accompanying the package, filling by `prev_x`
+#'
+#' map_lgas(lga_data, fill = prev_x, label = TRUE)
 map_lgas <- function(
     .data,
     fill,
-    st = .data$state,
+    state = state,
     lga = lga,
     label = FALSE,
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-  states <- dplyr::distinct(.data, {{ st }}) |> dplyr::pull({{ st }})
+  states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
@@ -30,8 +34,8 @@ map_lgas <- function(
     dplyr::left_join(
       .data,
       dplyr::join_by(
-        .data$state == {{ st }},
-        lga == {{ lga }}
+        {{ state }} == {{ state }},
+        {{ lga }} == {{ lga }}
       ),
       multiple = "all"
     )

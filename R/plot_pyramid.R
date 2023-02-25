@@ -1,18 +1,33 @@
 #' Pyramid Plot of Age and Sex Data
 #'
 #' @param var the variable name in the data to be used to plot the pyramid
-#' @param age_band the variable name in the data that contains the different age-band
+#' @param age_group the variable name in the data that contains the different age-band
 #' @param sex the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR
 #' @inheritParams map_lgas
 #'
 #' @return population pyramid plot
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#'
+#' ## plot 2022 spectrum estimate of Zamfara by sex
+#'
+#' pop_data <- spectrum(year = 2022, state = "Zamfara") |>
+#' dplyr::mutate(
+#' age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
+#' ) |>
+#' dplyr::group_by(state, sex, age_group) |>
+#' dplyr::summarise(
+#' estimate = sum(estimate, na.rm = TRUE),
+#' .groups = "drop"
+#' )
+#'
+#' plot_pyramid(pop_data, var = estimate)
 plot_pyramid <- function(
     .data,
     var,
-    age_band = .data$age_group,
+    age_group = age_group,
     sex = sex,
     label = TRUE,
     cols = NULL,
@@ -23,8 +38,8 @@ plot_pyramid <- function(
   plot <- .data |>
     dplyr::mutate(
       {{ var }} := ifelse({{ sex }} == "F", {{ var }} * -1, {{ var }}),
-      {{ age_band }} := factor(
-        {{ age_band }},
+      {{ age_group }} := factor(
+        {{ age_group }},
         levels = c(
           "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
           "40-44", "45-49", "50-54", "55-59", "60-64", "65+"
@@ -33,7 +48,7 @@ plot_pyramid <- function(
     ) |>
     ggplot2::ggplot(
       ggplot2::aes(
-        y = {{ age_band }},
+        y = {{ age_group }},
         fill = {{ sex }}
       )
     ) +

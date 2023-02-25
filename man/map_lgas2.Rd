@@ -8,7 +8,7 @@ map_lgas2(
   .data,
   fill,
   bubble,
-  st = .data$state,
+  state = state,
   lga = lga,
   label = FALSE,
   cols = NULL,
@@ -23,7 +23,7 @@ map_lgas2(
 
 \item{bubble}{the variable name of the column to be used for the bubble (point) plot}
 
-\item{st}{the variable name of the column representing states in the data}
+\item{state}{the variable name of the column representing states in the data}
 
 \item{lga}{the variable name of the column representing LGAs in the data}
 
@@ -42,5 +42,9 @@ a two-dimensional LGA-level map
 Plot LGA-level Map with Bubbles
 }
 \examples{
-NULL
+
+## map the lga_data accompanying the package, filling by `prev_x` and bubbles by `incidence_x`
+
+map_lgas2(lga_data, fill = prev_x, bubble = incidence_x, label = TRUE)
+
 }

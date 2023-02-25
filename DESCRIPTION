@@ -1,16 +1,32 @@
 Package: mapndr
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Mapping of Rectangular Data Tailored for the Nigeria National Data Repository
+Version: 0.0.0.900
+Authors@R: 
+    c(person(given = "Stephen",
+           family = "Balogun",
+           role = c("aut", "cre"),
+           email = "stephentaiyebalogun@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-9928-3703")),
+           person(given = "Kehinde",
+           family = "Balogun",
+           role = "ctb"),
+            person(given = "Eniola",
+           family = "Erubami",
+           role = "ctb"),
+            person(given = "Henry",
+           family = "Irabor",
+           role = "ctb"))
+Maintainer: The package maintainer <stephentaiyebalogun@gmail.com>
+Description: The package aims to simplify geospatial analysis and plotting of population pyramids of summary data from the 
+    Nigeria National Data Repository (NDR). It aligns with the naming convention for `state`, `LGA` and `sex` variables as 
+    obtained from most of the line-lists obtained from the NDR.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
     dplyr,
+    forcats,
     ggplot2,
     naijR,
     plotly,
@@ -24,3 +40,5 @@ Imports:
 RoxygenNote: 7.2.3
 URL: https://github.com/stephenbalogun/mapndr
 BugReports: https://github.com/stephenbalogun/mapndr/issues
+Depends: 
+    R (>= 4.0)

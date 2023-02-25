@@ -7,12 +7,30 @@
 #' @return population pyramid plot
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## plot 2022 spectrum estimate of Zamfara by sex and `incidence_x`
+#'
+#' pop_data <- spectrum(year = 2022, state = "Zamfara") |>
+#' dplyr::mutate(
+#' age_group = forcats::fct_collapse(age_group, "65+" = c("65-69", "70-74", "75-79", "80+"))
+#' ) |>
+#' dplyr::group_by(state, sex, age_group) |>
+#' dplyr::summarise(
+#' estimate = sum(estimate, na.rm = TRUE),
+#' .groups = "drop"
+#' ) |>
+#' dplyr::mutate(
+#' incidence_x = round(estimate * runif(1, max = 0.3))
+#' )
+#'
+#' plot_pyramid2(pop_data, high_var = estimate, low_var = incidence_x)
+#'
 plot_pyramid2 <- function(
     .data,
     high_var,
     low_var,
-    age_band = .data$age_group,
+    age_group = age_group,
     sex = sex,
     label = TRUE,
     cols = NULL,
@@ -26,8 +44,8 @@ plot_pyramid2 <- function(
       {{ low_var }} := ifelse({{ sex }} == "F", {{ low_var }} * -1, {{ low_var }}),
       lab = round({{ low_var }} / {{ high_var }}, digits = 2),
       lab = ifelse({{ sex }} == "F", .data$lab * -1, .data$lab),
-      {{ age_band }} := factor(
-        {{ age_band }},
+      {{ age_group }} := factor(
+        {{ age_group }},
         levels = c(
           "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
           "40-44", "45-49", "50-54", "55-59", "60-64", "65+"
@@ -37,7 +55,7 @@ plot_pyramid2 <- function(
 
   plot <- df |>
     ggplot2::ggplot(
-      ggplot2::aes(y = {{ age_band }}, fill = {{ sex }})
+      ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
     ) +
     ggplot2::geom_bar(
       ggplot2::aes(x = {{ high_var }}),

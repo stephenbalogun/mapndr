@@ -8,7 +8,7 @@ map_states2(
   .data,
   fill,
   bubble,
-  st = .data$state,
+  state = state,
   label = FALSE,
   cols = NULL,
   size = NULL,
@@ -22,7 +22,7 @@ map_states2(
 
 \item{bubble}{the variable name of the column to be used for the bubble (point) plot}
 
-\item{st}{the variable name of the column representing states in the data}
+\item{state}{the variable name of the column representing states in the data}
 
 \item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
 
@@ -39,5 +39,12 @@ a two-dimensional state-level map
 Plot State-level Map with Bubbles
 }
 \examples{
-NULL
+
+## map 2022 spectrum estimate for "Ondo", "Oyo", "Osun" and "Ogun" states interactively
+
+state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
+  dplyr::count(state, wt = estimate, name = "estimate")
+
+map_states2(state_data, fill = estimate, bubble = estimate, label = TRUE)
+
 }

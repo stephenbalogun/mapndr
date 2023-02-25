@@ -9,7 +9,7 @@ map_states3(
   fill,
   light_b,
   dark_b,
-  st = .data$state,
+  state = state,
   label = FALSE,
   cols = NULL,
   size = NULL,
@@ -25,7 +25,7 @@ map_states3(
 
 \item{dark_b}{the variable name of the column to be used for the darker (smaller) bubble}
 
-\item{st}{the variable name of the column representing states in the data}
+\item{state}{the variable name of the column representing states in the data}
 
 \item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
 
@@ -42,5 +42,13 @@ a three-dimensional state-level map
 Plot State-level Map with Two Bubbles
 }
 \examples{
-NULL
+
+## map 2022 spectrum estimate for "Ondo", "Oyo", "Osun" and "Ogun" states interactively
+
+state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
+  dplyr::count(state, wt = estimate, name = "estimate") |>
+  dplyr::mutate(estimate_scaled = estimate * 0.8)
+
+map_states3(state_data, fill = estimate, light_b = estimate, dark_b = estimate_scaled, label = TRUE)
+
 }

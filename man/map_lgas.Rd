@@ -7,7 +7,7 @@
 map_lgas(
   .data,
   fill,
-  st = .data$state,
+  state = state,
   lga = lga,
   label = FALSE,
   cols = NULL,
@@ -20,7 +20,7 @@ map_lgas(
 
 \item{fill}{the variable (categorical or continuous) to be used to fill (color) the LGAs}
 
-\item{st}{the variable name of the column representing states in the data}
+\item{state}{the variable name of the column representing states in the data}
 
 \item{lga}{the variable name of the column representing LGAs in the data}
 
@@ -39,5 +39,8 @@ LGA-level map
 Plot LGA-level Map
 }
 \examples{
-NULL
+
+## map the lga_data accompanying the package, filling by `prev_x`
+
+map_lgas(lga_data, fill = prev_x, label = TRUE)
 }

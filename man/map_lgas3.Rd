@@ -9,7 +9,7 @@ map_lgas3(
   fill,
   light_b,
   dark_b,
-  st = .data$state,
+  state = state,
   lga = lga,
   label = FALSE,
   cols = NULL,
@@ -26,7 +26,7 @@ map_lgas3(
 
 \item{dark_b}{the variable name of the column to be used for the darker (smaller) bubble}
 
-\item{st}{the variable name of the column representing states in the data}
+\item{state}{the variable name of the column representing states in the data}
 
 \item{lga}{the variable name of the column representing LGAs in the data}
 
@@ -45,5 +45,9 @@ a three-dimensional LGA-level map
 Plot LGA-level Map with Two Bubbles
 }
 \examples{
-NULL
+
+## map the lga_data, filling by `prev_x` and light_b by `population` and dark_b by `incidence_x`
+
+map_lgas3(lga_data, fill = prev_x, light_b = population, dark_b = incidence_x, label = TRUE)
+
 }

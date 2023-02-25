@@ -5,24 +5,32 @@
 #' @return a two-dimensional state-level map
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#'
+#' ## map 2022 spectrum estimate for "Ondo", "Oyo", "Osun" and "Ogun" states interactively
+#'
+#' state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
+#'   dplyr::count(state, wt = estimate, name = "estimate")
+#'
+#' map_states2(state_data, fill = estimate, bubble = estimate, label = TRUE)
+#'
 map_states2 <- function(
     .data,
     fill,
     bubble,
-    st = .data$state,
+    state = state,
     label = FALSE,
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-  states <- dplyr::distinct(.data, {{ st }}) |> dplyr::pull({{ st }})
+  states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
   df <- ndr_states(states) |>
     dplyr::left_join(
       .data,
-      dplyr::join_by(.data$state == {{ st }}),
+      dplyr::join_by({{ state }} == {{ state }}),
       multiple = "all"
     )
 
@@ -52,7 +60,8 @@ map_states2 <- function(
       alpha = 0.5
     ) +
     ggplot2::coord_map() +
-    ggplot2::theme_void()
+    ggplot2::theme_void() +
+    ggplot2::scale_size(range = c(5, 15))
 
 
   if (label) {
