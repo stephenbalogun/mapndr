@@ -10,7 +10,7 @@ map_states2 <- function(
     .data,
     fill,
     bubble,
-    st = state,
+    st = .data$state,
     label = FALSE,
     cols = NULL,
     size = NULL,
@@ -22,12 +22,12 @@ map_states2 <- function(
   df <- ndr_states(states) |>
     dplyr::left_join(
       .data,
-      dplyr::join_by(state == {{ st }}),
+      dplyr::join_by(.data$state == {{ st }}),
       multiple = "all"
     )
 
   lab_data <- df |>
-    dplyr::group_by(state) |>
+    dplyr::group_by(.data$state) |>
     dplyr::summarise(
       dplyr::across(
         tidyselect::where(is.numeric), mean
@@ -39,7 +39,7 @@ map_states2 <- function(
 
   p <- df |>
     ggplot2::ggplot(
-      ggplot2::aes(long, lat, group = group)
+      ggplot2::aes(.data$long, .data$lat, group = .data$group)
     ) +
     ggplot2::geom_polygon(
       ggplot2::aes(fill = {{ fill }}),
@@ -48,7 +48,7 @@ map_states2 <- function(
     ) +
     ggplot2::geom_point(
       data = lab_data,
-      ggplot2::aes((long + noise), (lat + noise), size = {{ bubble }}),
+      ggplot2::aes((.data$long + noise), (.data$lat + noise), size = {{ bubble }}),
       alpha = 0.5
     ) +
     ggplot2::coord_map() +
@@ -59,7 +59,7 @@ map_states2 <- function(
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(long, lat, label = state),
+        ggplot2::aes(.data$long, .data$lat, label = .data$state),
         size = size %||% 3
       )
   }

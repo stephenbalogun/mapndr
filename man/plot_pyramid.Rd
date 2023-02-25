@@ -7,7 +7,7 @@
 plot_pyramid(
   .data,
   var,
-  age_band = age_group,
+  age_band = .data$age_group,
   sex = sex,
   label = TRUE,
   cols = NULL,

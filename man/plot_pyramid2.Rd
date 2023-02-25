@@ -8,7 +8,7 @@ plot_pyramid2(
   .data,
   high_var,
   low_var,
-  age_band = age_group,
+  age_band = .data$age_group,
   sex = sex,
   label = TRUE,
   cols = NULL,

@@ -11,7 +11,7 @@ map_lgas2 <- function(
     .data,
     fill,
     bubble,
-    st = state,
+    st = .data$state,
     lga = lga,
     label = FALSE,
     cols = NULL,
@@ -25,14 +25,14 @@ map_lgas2 <- function(
     dplyr::left_join(
       .data,
       dplyr::join_by(
-        state == {{ st }},
+        .data$state == {{ st }},
         lga == {{ lga }}
       ),
       multiple = "all"
     )
 
   lab_data <- df |>
-    dplyr::group_by(state, lga) |>
+    dplyr::group_by(.data$state, .data$lga) |>
     dplyr::summarise(
       dplyr::across(
         tidyselect::where(is.numeric), mean
@@ -44,7 +44,7 @@ map_lgas2 <- function(
 
   p <- df |>
     ggplot2::ggplot(
-      ggplot2::aes(long, lat, group = lga)
+      ggplot2::aes(.data$long, .data$lat, group = .data$lga)
     ) +
     ggplot2::geom_polygon(
       ggplot2::aes(fill = {{ fill }}),
@@ -52,7 +52,7 @@ map_lgas2 <- function(
     ) +
     ggplot2::geom_point(
       data = lab_data,
-      ggplot2::aes((long + noise), (lat + noise), size = {{ bubble }}),
+      ggplot2::aes((.data$long + noise), (.data$lat + noise), size = {{ bubble }}),
       alpha = 0.3
     ) +
     ggplot2::coord_map() +
@@ -63,7 +63,7 @@ map_lgas2 <- function(
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(long, lat, label = lga),
+        ggplot2::aes(.data$long, .data$lat, label = .data$lga),
         size = size %||% 2,
         check_overlap = TRUE
       )

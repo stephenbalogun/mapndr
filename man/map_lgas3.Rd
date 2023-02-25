@@ -9,7 +9,7 @@ map_lgas3(
   fill,
   light_b,
   dark_b,
-  st = state,
+  st = .data$state,
   lga = lga,
   label = FALSE,
   cols = NULL,

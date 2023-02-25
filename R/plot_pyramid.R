@@ -12,7 +12,7 @@
 plot_pyramid <- function(
     .data,
     var,
-    age_band = age_group,
+    age_band = .data$age_group,
     sex = sex,
     label = TRUE,
     cols = NULL,

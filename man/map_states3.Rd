@@ -9,7 +9,7 @@ map_states3(
   fill,
   light_b,
   dark_b,
-  st = state,
+  st = .data$state,
   label = FALSE,
   cols = NULL,
   size = NULL,

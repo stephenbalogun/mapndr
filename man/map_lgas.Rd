@@ -7,7 +7,7 @@
 map_lgas(
   .data,
   fill,
-  st = state,
+  st = .data$state,
   lga = lga,
   label = FALSE,
   cols = NULL,

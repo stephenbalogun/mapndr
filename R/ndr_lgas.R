@@ -26,8 +26,8 @@ ndr_lgas <- function(state) {
   state <- stringr::str_replace_all(state, "FCT", "Federal Capital Territory")
 
   st <- naijR::lgas_nigeria |>
-    dplyr::filter(state %in% state) |>
-    dplyr::select(lga, state)
+    dplyr::filter(.data$state %in% state) |>
+    dplyr::select(.data$lga, .data$state)
 
   purrr::map_df(
     state,
@@ -35,11 +35,11 @@ ndr_lgas <- function(state) {
       naijR::map_ng(naijR::lgas(.))
     )
   ) |>
-    dplyr::rename(lga = region) |>
+    dplyr::rename(lga = .data$region) |>
     dplyr::select(-tidyselect::last_col()) |>
-    dplyr::left_join(st, dplyr::join_by(lga), multiple = "all") |>
+    dplyr::left_join(st, dplyr::join_by(.data$lga), multiple = "all") |>
     dplyr::mutate(
-      lga = stringr::str_replace_all(lga, diff),
+      lga = stringr::str_replace_all(.data$lga, diff),
       state = ifelse(state == "Federal Capital Territory", "FCT", state)
     )
 }

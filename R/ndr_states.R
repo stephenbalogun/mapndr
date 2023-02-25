@@ -14,7 +14,7 @@ ndr_states <- function(state) {
       naijR::states(state)
     )
   ) |>
-    dplyr::rename(state = region)
+    dplyr::rename(state = .data$region)
 
   if (any(state %in% "Federal Capital Territory")) {
     df <- df |>

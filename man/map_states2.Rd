@@ -8,7 +8,7 @@ map_states2(
   .data,
   fill,
   bubble,
-  st = state,
+  st = .data$state,
   label = FALSE,
   cols = NULL,
   size = NULL,

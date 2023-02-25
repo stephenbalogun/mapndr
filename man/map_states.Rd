@@ -7,7 +7,7 @@
 map_states(
   .data,
   fill,
-  st = state,
+  st = .data$state,
   label = FALSE,
   cols = NULL,
   size = NULL,

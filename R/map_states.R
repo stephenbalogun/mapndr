@@ -9,7 +9,7 @@
 map_states <- function(
     .data,
     fill,
-    st = state,
+    st = .data$state,
     label = FALSE,
     cols = NULL,
     size = NULL,
@@ -21,13 +21,13 @@ map_states <- function(
   df <- ndr_states(states) |>
     dplyr::left_join(
       .data,
-      dplyr::join_by(state == {{ st }}),
+      dplyr::join_by(.data$state == {{ st }}),
       multiple = "all"
     )
 
   p <- df |>
     ggplot2::ggplot(
-      ggplot2::aes(long, lat, group = group)
+      ggplot2::aes(.data$long, .data$lat, group = .data$group)
     ) +
     ggplot2::geom_polygon(
       ggplot2::aes(fill = {{ fill }}),
@@ -38,7 +38,7 @@ map_states <- function(
 
   if (label) {
     lab_data <- df |>
-      dplyr::group_by(state) |>
+      dplyr::group_by(.data$state) |>
       dplyr::summarise(
         dplyr::across(
           tidyselect::where(is.numeric), mean
@@ -49,7 +49,7 @@ map_states <- function(
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(long, lat, label = state),
+        ggplot2::aes(.data$long, .data$lat, label = .data$state),
         size = size %||% 3
       )
   }
@@ -61,7 +61,7 @@ map_states <- function(
 
     p <- p +
       ggplot2::scale_fill_manual(
-        values = cols %||% cols_select
+        values = cols %||% col_select
       )
   } else if (is.numeric(fill_vec)) {
     p <- p + ggplot2::scale_fill_viridis_c(alpha = 0.5)

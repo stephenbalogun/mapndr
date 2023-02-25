@@ -12,7 +12,7 @@ plot_pyramid2 <- function(
     .data,
     high_var,
     low_var,
-    age_band = age_group,
+    age_band = .data$age_group,
     sex = sex,
     label = TRUE,
     cols = NULL,
@@ -25,7 +25,7 @@ plot_pyramid2 <- function(
       {{ high_var }} := ifelse({{ sex }} == "F", {{ high_var }} * -1, {{ high_var }}),
       {{ low_var }} := ifelse({{ sex }} == "F", {{ low_var }} * -1, {{ low_var }}),
       lab = round({{ low_var }} / {{ high_var }}, digits = 2),
-      lab = ifelse({{ sex }} == "F", lab * -1, lab),
+      lab = ifelse({{ sex }} == "F", .data$lab * -1, .data$lab),
       {{ age_band }} := factor(
         {{ age_band }},
         levels = c(
@@ -62,7 +62,7 @@ plot_pyramid2 <- function(
         data = df,
         ggplot2::aes(
           x = {{ high_var }},
-          label = scales::percent(abs(lab))
+          label = scales::percent(abs(.data$lab))
         ),
         hjust = "outward",
         size = size %||% 3,

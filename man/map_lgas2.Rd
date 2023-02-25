@@ -8,7 +8,7 @@ map_lgas2(
   .data,
   fill,
   bubble,
-  st = state,
+  st = .data$state,
   lga = lga,
   label = FALSE,
   cols = NULL,

@@ -210,7 +210,7 @@ spectrum <- function(major = 6, minor = 19, year = 2022, state = NULL) {
     )
   ) |>
     tidyr::pivot_longer(
-      cols = -c(country:sex),
+      cols = -c(.data$country:.data$sex),
       names_to = "year",
       values_to = "estimate",
       names_transform = list(year = as.integer, estimate = as.double)
@@ -220,13 +220,13 @@ spectrum <- function(major = 6, minor = 19, year = 2022, state = NULL) {
   df <- if (major == 6 && minor == 19) {
     spectrum_619 |>
       dplyr::filter(
-        year %in% {{ year }}
+        .data$year %in% {{ year }}
       )
   }
 
   if (!is.null(state)) {
     df |>
-      dplyr::filter(state %in% state)
+      dplyr::filter(.data$state %in% state)
   } else {
     df
   }
