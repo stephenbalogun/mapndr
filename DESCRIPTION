@@ -33,6 +33,7 @@ Imports:
     purrr,
     rlang,
     scales,
+    sf,
     stringr,
     tibble,
     tidyr,
