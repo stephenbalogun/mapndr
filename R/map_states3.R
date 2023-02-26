@@ -26,25 +26,11 @@ map_states3 <- function(
     size = NULL,
     interactive = FALSE) {
 
-  if (!is.logical(label)) {
-    rlang::abort("The label value is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
-  }
-
-  if (!is.logical(interactive)) {
-    rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
-  }
-
-  if (!is.null(size) && !is.numeric(size)) {
-    rlang::abort("`size` value must be in numbers")
-  }
-
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
-  if (!is.null(cols) && length(cols) > 1 && length(cols) != length(unique(fill_vec))) {
-    rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
-  }
+  validate_maps(label, interactive,  size, cols)
 
   noise <- stats::runif(1, min = 0.05, max = 0.1)
 
@@ -83,6 +69,12 @@ map_states3 <- function(
         data = lab_data,
         ggplot2::aes(.data$long, .data$lat, size = {{ light_b }}),
         color = "#f5c1c1",
+        show.legend = FALSE
+      ) +
+      ggplot2::geom_point(
+        data = lab_data,
+        ggplot2::aes(.data$long, .data$lat, size = {{ dark_b }}),
+        color = "#ae2234",
         show.legend = FALSE
       ) +
       ggplot2::coord_sf() +
@@ -126,7 +118,12 @@ map_states3 <- function(
       ) +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long, .data$lat, label = round({{ dark_b }})), size = size %||% 3,
+        ggplot2::aes(
+          .data$long,
+          .data$lat,
+          label = scales::comma(round({{ dark_b }}))),
+        size = size %||% 3,
+        color = "black",
         check_overlap = TRUE
       )
   }
