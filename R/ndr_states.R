@@ -14,6 +14,13 @@
 #' ## get the coordinates of Bayelsa and Ebonyi states
 #' bay_ebo_coords <- ndr_states(c("Bayelsa", "Ebonyi"))
 ndr_states <- function(state) {
+
+
+  if (all(!state %in% c(naijR::states(), "FCT"))) {
+    rlang::abort("state must be any or a combination of the recognized Nigeria states based on NDR format")
+  }
+
+
   state <- stringr::str_replace_all(state, "FCT", "Federal Capital Territory")
 
   df <- ggplot2::map_data(

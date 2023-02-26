@@ -15,6 +15,11 @@
 #' ana_kog_coord <- ndr_lgas(c("Anambra", "Kogi"))
 #'
 ndr_lgas <- function(state) {
+
+  if (all(!state %in% c(naijR::states(), "FCT"))) {
+    rlang::abort("state must be any or a combination of the recognized Nigeria states based on NDR format")
+  }
+
   state <- stringr::str_replace_all(state, "FCT", "Federal Capital Territory")
 
   st <- naijR::lgas_nigeria |>
