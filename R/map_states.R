@@ -21,6 +21,7 @@ map_states <- function(
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
+
   if (!is.logical(label)) {
     rlang::abort("The label value is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
