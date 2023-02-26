@@ -13,7 +13,7 @@ validate_maps <- function(label, interactive, size, cols) {
   }
 
 
-  if (!is.null(cols) && length(cols) > 1 && length(cols) != length(unique(fill_vec))) {
+  if (!is.null(cols) && length(cols) > 1 && length(cols) != length(unique(.env$fill_vec))) {
     rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
   }
 }
