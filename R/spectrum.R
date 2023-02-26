@@ -15,7 +15,6 @@
 #' ## get spectrum estimate for Adamawa and Rivers in 2023
 #' ada_riv_2023 <- spectrum(year = 2023, state = c("Adamawa", "Rivers"))
 spectrum <- function(major = 6, minor = 19, year = 2022, state = NULL) {
-
   if (!is.numeric(year) || !is.numeric(major) || !is.numeric(minor)) {
     rlang::abort("The values to `year`, `major` and `minor` must all be integers!")
   }

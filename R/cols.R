@@ -32,7 +32,6 @@ my_cols <- function(n) {
     c(cols[1], cols[2], cols[4], cols[5], cols[6], cols[7], cols[8]),
     "Too many categories in the data. Choose between 2 and 7 categories"
   )
-
 }
 
 # switch(n,
