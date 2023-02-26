@@ -50,7 +50,7 @@ map_lgas <- function(
         fill = cols,
         color = "black"
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void()
   } else {
     p <- df |>
@@ -61,7 +61,7 @@ map_lgas <- function(
         ggplot2::aes(fill = {{ fill }}),
         color = "black"
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void()
   }
 

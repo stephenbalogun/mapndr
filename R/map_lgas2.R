@@ -65,7 +65,7 @@ map_lgas2 <- function(
         ggplot2::aes(.data$long, .data$lat, size = {{ bubble }}),
         alpha = 0.4
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void() +
       ggplot2::scale_size(range = c(5, 15))
   } else {
@@ -82,7 +82,7 @@ map_lgas2 <- function(
         ggplot2::aes(.data$long, .data$lat, size = {{ bubble }}),
         alpha = 0.4
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void() +
       ggplot2::scale_size(range = c(5, 15))
   }

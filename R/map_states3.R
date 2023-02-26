@@ -68,7 +68,7 @@ map_states3 <- function(
         color = "#f5c1c1",
         show.legend = FALSE
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void() +
       ggplot2::scale_size(range = c(5, 15))
   } else {
@@ -93,7 +93,7 @@ map_states3 <- function(
         color = "#ae2234",
         show.legend = FALSE
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void() +
       ggplot2::scale_size(range = c(5, 15))
   }
