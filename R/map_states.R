@@ -21,9 +21,28 @@ map_states <- function(
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
+
+  if (!is.logical(label)) {
+    rlang::abort("The label value is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
+  }
+
+  if (!is.logical(interactive)) {
+    rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
+  }
+
+  if (!is.null(size) && !is.numeric(size)) {
+    rlang::abort("`size` value must be in numbers")
+  }
+
+
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
+
+
+  if (!is.null(cols) && length(cols) > 1 && length(cols) != length(unique(fill_vec))) {
+    rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
+  }
 
   df <- ndr_states(states) |>
     dplyr::left_join(
@@ -41,7 +60,7 @@ map_states <- function(
         fill = cols,
         color = "black"
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void()
   } else {
     p <- df |>
@@ -52,7 +71,7 @@ map_states <- function(
         ggplot2::aes(fill = {{ fill }}),
         color = "black"
       ) +
-      ggplot2::coord_map() +
+      ggplot2::coord_sf() +
       ggplot2::theme_void()
   }
 
