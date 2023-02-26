@@ -1,6 +1,6 @@
 #' Pyramid Plot of Age and Sex Data
 #'
-#' @param var the variable name in the data to be used to plot the pyramid
+#' @param fill the variable name in the data to be used to plot the pyramid
 #' @param age_group the variable name in the data that contains the different age-band
 #' @param sex the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR
 #' @inheritParams map_lgas
@@ -23,10 +23,10 @@
 #'     .groups = "drop"
 #'   )
 #'
-#' plot_pyramid(pop_data, var = estimate)
+#' plot_pyramid(pop_data, fill = estimate)
 plot_pyramid <- function(
     .data,
-    var,
+    fill,
     age_group = age_group,
     sex = sex,
     label = TRUE,
@@ -34,27 +34,13 @@ plot_pyramid <- function(
     size = NULL,
     interactive = FALSE) {
 
-  if (!is.logical(label)) {
-    rlang::abort("The label value is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
-  }
-
-  if (!is.logical(interactive)) {
-    rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
-  }
-
-  if (!is.null(size) && !is.numeric(size)) {
-    rlang::abort("`size` value must be in numbers")
-  }
-
   my_cols <- c("F" = "#f5c1c1", "M" = "#c1f5f5")
 
-  if (!is.null(cols) && length(cols) != length(my_cols)) {
-    rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
-  }
+  validate_pyramid(label, interactive, size, cols)
 
   plot <- .data |>
     dplyr::mutate(
-      {{ var }} := ifelse({{ sex }} == "F", {{ var }} * -1, {{ var }}),
+      {{ fill }} := ifelse({{ sex }} == "F", {{ fill }} * -1, {{ fill }}),
       {{ age_group }} := factor(
         {{ age_group }},
         levels = c(
@@ -70,7 +56,7 @@ plot_pyramid <- function(
       )
     ) +
     ggplot2::geom_bar(
-      ggplot2::aes(x = {{ var }}),
+      ggplot2::aes(x = {{ fill }}),
       stat = "identity",
       color = "#777777"
     ) +
@@ -84,8 +70,8 @@ plot_pyramid <- function(
     plot <- plot +
       ggplot2::geom_text(
         ggplot2::aes(
-          x = {{ var }},
-          label = abs({{ var }})
+          x = {{ fill }},
+          label = abs({{ fill }})
         ),
         hjust = "outward",
         size = size %||% 3,

@@ -1,7 +1,7 @@
 #' Pyramid Plot of Age and Sex Data
 #'
-#' @param high_var the variable name in the data to be used to fill the bar (the lighter color)
-#' @param low_var the variable name of the smaller values for the darker (shorter) fill
+#' @param light_fill the variable name in the data to be used to fill the bar (the lighter color)
+#' @param dark_fill the variable name of the smaller values for the darker (shorter) fill
 #' @inheritParams plot_pyramid
 #'
 #' @return population pyramid plot
@@ -24,12 +24,12 @@
 #'     incidence_x = round(estimate * runif(1, max = 0.3))
 #'   )
 #'
-#' plot_pyramid2(pop_data, high_var = estimate, low_var = incidence_x)
+#' plot_pyramid2(pop_data, light_fill = estimate, dark_fill = incidence_x)
 #'
 plot_pyramid2 <- function(
     .data,
-    high_var,
-    low_var,
+    light_fill,
+    dark_fill,
     age_group = age_group,
     sex = sex,
     label = TRUE,
@@ -37,31 +37,16 @@ plot_pyramid2 <- function(
     size = NULL,
     interactive = FALSE) {
 
-
-  if (!is.logical(label)) {
-    rlang::abort("The label value is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
-  }
-
-  if (!is.logical(interactive)) {
-    rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
-  }
-
-  if (!is.null(size) && !is.numeric(size)) {
-    rlang::abort("`size` value must be in numbers")
-  }
-
   my_cols <- c("F" = "#f5c1c1", "M" = "#c1f5f5")
 
+  validate_pyramid(label, interactive, size, cols)
 
-  if (!is.null(cols) && length(cols) != length(my_cols)) {
-    rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
-  }
 
   df <- .data |>
     dplyr::mutate(
-      {{ high_var }} := ifelse({{ sex }} == "F", {{ high_var }} * -1, {{ high_var }}),
-      {{ low_var }} := ifelse({{ sex }} == "F", {{ low_var }} * -1, {{ low_var }}),
-      lab = round({{ low_var }} / {{ high_var }}, digits = 2),
+      {{ light_fill }} := ifelse({{ sex }} == "F", {{ light_fill }} * -1, {{ light_fill }}),
+      {{ dark_fill }} := ifelse({{ sex }} == "F", {{ dark_fill }} * -1, {{ dark_fill }}),
+      lab = round({{ dark_fill }} / {{ light_fill }}, digits = 2),
       lab = ifelse({{ sex }} == "F", .data$lab * -1, .data$lab),
       {{ age_group }} := factor(
         {{ age_group }},
@@ -77,13 +62,13 @@ plot_pyramid2 <- function(
       ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
     ) +
     ggplot2::geom_bar(
-      ggplot2::aes(x = {{ high_var }}),
+      ggplot2::aes(x = {{ light_fill }}),
       stat = "identity",
       color = "#777777",
       alpha = 0.3
     ) +
     ggplot2::geom_bar(
-      ggplot2::aes(x = {{ low_var }}),
+      ggplot2::aes(x = {{ dark_fill }}),
       stat = "identity",
       color = "#777777"
     ) +
@@ -98,7 +83,7 @@ plot_pyramid2 <- function(
       ggplot2::geom_text(
         data = df,
         ggplot2::aes(
-          x = {{ high_var }},
+          x = {{ light_fill }},
           label = scales::percent(abs(.data$lab))
         ),
         hjust = "outward",

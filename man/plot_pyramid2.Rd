@@ -6,8 +6,8 @@
 \usage{
 plot_pyramid2(
   .data,
-  high_var,
-  low_var,
+  light_fill,
+  dark_fill,
   age_group = age_group,
   sex = sex,
   label = TRUE,
@@ -19,9 +19,9 @@ plot_pyramid2(
 \arguments{
 \item{.data}{a tabular (rectangular) data containing LGA and the variables to be plotted}
 
-\item{high_var}{the variable name in the data to be used to fill the bar (the lighter color)}
+\item{light_fill}{the variable name in the data to be used to fill the bar (the lighter color)}
 
-\item{low_var}{the variable name of the smaller values for the darker (shorter) fill}
+\item{dark_fill}{the variable name of the smaller values for the darker (shorter) fill}
 
 \item{age_group}{the variable name in the data that contains the different age-band}
 
@@ -58,6 +58,6 @@ pop_data <- spectrum(year = 2022, state = "Zamfara") |>
     incidence_x = round(estimate * runif(1, max = 0.3))
   )
 
-plot_pyramid2(pop_data, high_var = estimate, low_var = incidence_x)
+plot_pyramid2(pop_data, light_fill = estimate, dark_fill = incidence_x)
 
 }

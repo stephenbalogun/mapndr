@@ -6,7 +6,7 @@
 \usage{
 plot_pyramid(
   .data,
-  var,
+  fill,
   age_group = age_group,
   sex = sex,
   label = TRUE,
@@ -18,7 +18,7 @@ plot_pyramid(
 \arguments{
 \item{.data}{a tabular (rectangular) data containing LGA and the variables to be plotted}
 
-\item{var}{the variable name in the data to be used to plot the pyramid}
+\item{fill}{the variable name in the data to be used to plot the pyramid}
 
 \item{age_group}{the variable name in the data that contains the different age-band}
 
@@ -53,5 +53,5 @@ pop_data <- spectrum(year = 2022, state = "Zamfara") |>
     .groups = "drop"
   )
 
-plot_pyramid(pop_data, var = estimate)
+plot_pyramid(pop_data, fill = estimate)
 }
