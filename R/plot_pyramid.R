@@ -33,7 +33,6 @@ plot_pyramid <- function(
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-
   my_cols <- c("F" = "#f5c1c1", "M" = "#c1f5f5")
 
   validate_pyramid(label, interactive, size, cols)

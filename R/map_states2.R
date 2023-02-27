@@ -23,13 +23,16 @@ map_states2 <- function(
     cols = NULL,
     size = NULL,
     interactive = FALSE) {
-
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
 
-  validate_maps(label, interactive,  size, cols)
+  validate_maps(label, interactive, size, cols)
+
+  if (!is.null(cols) && length(cols) > 1 && length(cols) != length(unique(fill_vec))) {
+    rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
+  }
 
 
   noise <- stats::runif(1, min = 0.05, max = 0.1)
@@ -38,7 +41,7 @@ map_states2 <- function(
   df <- ndr_states(states) |>
     dplyr::left_join(
       .data,
-      dplyr::join_by({{ state }} == {{ state }}),
+      dplyr::join_by(state == {{ state }}),
       multiple = "all"
     )
 
