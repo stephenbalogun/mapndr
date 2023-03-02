@@ -9,9 +9,12 @@ plot_pyramid(
   fill,
   age_group = age_group,
   sex = sex,
+  age_bands = NULL,
   label = TRUE,
   cols = NULL,
   size = NULL,
+  border = TRUE,
+  border_color = NULL,
   interactive = FALSE
 )
 }
@@ -24,11 +27,18 @@ plot_pyramid(
 
 \item{sex}{the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR}
 
+\item{age_bands}{a vector of age-bands contained in the data to be used for age-categorization, if different from
+c( "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65+")}
+
 \item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
 
 \item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
 
 \item{size}{the text size of the labels in whole numbers. The default is 2}
+
+\item{border}{logical (boolean). It determines if the individual bars should have a border or not}
+
+\item{border_color}{if the `border` argument is set to `TRUE`, the user can supplied a border color using any of the standard color formats}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
