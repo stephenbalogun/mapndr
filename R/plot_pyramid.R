@@ -50,19 +50,11 @@ plot_pyramid <- function(
   data_age_group <- dplyr::distinct(.data, {{ age_group }}) |> dplyr::pull({{ age_group }})
 
 
-  validate_pyramid(label, interactive, size, cols)
+  validate_pyramid(label, interactive, size, cols, border, border_color)
 
 
   if (!is.null(age_bands) && !all(age_bands %in% data_age_group)) {
     rlang::abort("The age_bands supplied is not the same as the unique entries in the data provided")
-  }
-
-  if (!is.logical(border)) {
-    rlang::abort("The value supplied to the `border` argument must be either `TRUE` or `FALSE`")
-  }
-
-  if (!border && !is.null(border_color)) {
-    rlang::inform("This plot border argument has been set to `FALSE` and the border color supplied will be ignored")
   }
 
   plot <- .data |>

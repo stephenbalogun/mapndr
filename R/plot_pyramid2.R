@@ -32,14 +32,27 @@ plot_pyramid2 <- function(
     dark_fill,
     age_group = age_group,
     sex = sex,
+    age_bands = NULL,
     label = TRUE,
     cols = NULL,
     size = NULL,
+    border = TRUE,
+    border_color = NULL,
     interactive = FALSE) {
   my_cols <- c("F" = "#f5c1c1", "M" = "#c1f5f5")
 
-  validate_pyramid(label, interactive, size, cols)
+  age_cat <- c(
+    "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
+    "40-44", "45-49", "50-54", "55-59", "60-64", "65+"
+  )
 
+  data_age_group <- dplyr::distinct(.data, {{ age_group }}) |> dplyr::pull({{ age_group }})
+
+  validate_pyramid(label, interactive, size, cols, border, border_color)
+
+  if (!is.null(age_bands) && !all(age_bands %in% data_age_group)) {
+    rlang::abort("The age_bands supplied is not the same as the unique entries in the data provided")
+  }
 
   df <- .data |>
     dplyr::mutate(
@@ -56,26 +69,39 @@ plot_pyramid2 <- function(
       )
     )
 
-  plot <- df |>
-    ggplot2::ggplot(
-      ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
-    ) +
-    ggplot2::geom_bar(
-      ggplot2::aes(x = {{ light_fill }}),
-      stat = "identity",
-      color = "#777777",
-      alpha = 0.3
-    ) +
-    ggplot2::geom_bar(
-      ggplot2::aes(x = {{ dark_fill }}),
-      stat = "identity",
-      color = "#777777"
-    ) +
-    ggplot2::theme_classic() +
-    ggplot2::scale_x_continuous(
-      labels = scales::label_dollar(prefix = "", style_negative = "parens")
-    ) +
-    ggplot2::scale_fill_manual(values = cols %||% my_cols)
+  if (border) {
+
+    plot <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
+      ) +
+      ggplot2::geom_bar(
+        ggplot2::aes(x = {{ light_fill }}),
+        stat = "identity",
+        color = border_color %||% "#777777",
+        alpha = 0.3
+      ) +
+      ggplot2::geom_bar(
+        ggplot2::aes(x = {{ dark_fill }}),
+        stat = "identity",
+        color = border_color %||% "#777777"
+      )
+  } else {
+
+    plot <- df |>
+      ggplot2::ggplot(
+        ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
+      ) +
+      ggplot2::geom_bar(
+        ggplot2::aes(x = {{ light_fill }}),
+        stat = "identity",
+        alpha = 0.3
+      ) +
+      ggplot2::geom_bar(
+        ggplot2::aes(x = {{ dark_fill }}),
+        stat = "identity"
+      )
+  }
 
   if (label) {
     plot <- plot +
@@ -92,8 +118,20 @@ plot_pyramid2 <- function(
   }
 
   if (interactive) {
-    plotly::ggplotly(plot)
+    plotly::ggplotly(
+      plot +
+        ggplot2::theme_classic() +
+        ggplot2::scale_x_continuous(
+          labels = scales::label_dollar(prefix = "", style_negative = "parens")
+        ) +
+        ggplot2::scale_fill_manual(values = cols %||% my_cols)
+      )
   } else {
-    plot
+    plot +
+      ggplot2::theme_classic() +
+      ggplot2::scale_x_continuous(
+        labels = scales::label_dollar(prefix = "", style_negative = "parens")
+      ) +
+      ggplot2::scale_fill_manual(values = cols %||% my_cols)
   }
 }
