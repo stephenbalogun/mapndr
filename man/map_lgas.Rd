@@ -9,9 +9,14 @@ map_lgas(
   fill,
   state = state,
   lga = lga,
-  label = FALSE,
-  cols = NULL,
-  size = NULL,
+  label_lga = FALSE,
+  label_fill = FALSE,
+  label_lga_color = NULL,
+  label_fill_color = NULL,
+  fill_colors = NULL,
+  size_lga = NULL,
+  size_fill = NULL,
+  border_color = NULL,
   interactive = FALSE
 )
 }
@@ -24,11 +29,21 @@ map_lgas(
 
 \item{lga}{the variable name of the column representing LGAs in the data}
 
-\item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
+\item{label_lga}{logical (boolean), indicating if the LGAs should be labelled or not}
 
-\item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+\item{label_fill}{logical (boolean), indicating if the values for the `fill` data should be displayed}
 
-\item{size}{the text size of the labels in whole numbers. The default is 2}
+\item{label_lga_color}{when supplied, this color will be used as font-color for the `lga` label}
+
+\item{label_fill_color}{when supplied, this color will be used as font-color for the `fill` label}
+
+\item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+
+\item{size_lga}{the font-size for the `lga` labels in whole numbers. The default is 2}
+
+\item{size_fill}{the font-size for the `fill` labels in whole numbers. The default is 2}
+
+\item{border_color}{the color to be used for the map boundaries. The default is black}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
@@ -42,5 +57,5 @@ Plot LGA-level Map
 
 ## map the lga_data accompanying the package, filling by `prev_x`
 
-map_lgas(lga_data, fill = prev_x, label = TRUE)
+map_lgas(lga_data, fill = prev_x, label_lga = TRUE)
 }
