@@ -69,10 +69,13 @@ map_lgas <- function(
 
   if (!is.numeric(fill_vec)) {
     lab_data <- df |>
-      dplyr::distinct(.data$lga, {{ fill }}) |>
+      dplyr::distinct(.data$state, .data$lga, {{ fill }}) |>
       dplyr::left_join(
         lab_data,
-        dplyr::join_by(lga == {{ lga }})
+        dplyr::join_by(
+          state == {{ state }},
+          lga == {{ lga }}
+          )
       )
   }
 
