@@ -15,6 +15,7 @@ plot_pyramid(
   size = NULL,
   border = TRUE,
   border_color = NULL,
+  inverse = FALSE,
   interactive = FALSE
 )
 }
@@ -39,6 +40,8 @@ c( "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", 
 \item{border}{logical (boolean). It determines if the individual bars should have a border or not}
 
 \item{border_color}{if the `border` argument is set to `TRUE`, the user can supplied a border color using any of the standard color formats}
+
+\item{inverse}{logical (boolean). If set to `TRUE`, the pyramid plot will be inverted, starting from highest age-group to lowest}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }

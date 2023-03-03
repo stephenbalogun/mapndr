@@ -13,7 +13,7 @@ validate_maps <- function(label, interactive, size, cols) {
 }
 
 
-validate_pyramid <- function(label, interactive, size, cols, border, border_color) {
+validate_pyramid <- function(label, interactive, size, cols, border, border_color, inverse) {
   if (!is.logical(label)) {
     rlang::abort("The label value is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
@@ -36,5 +36,9 @@ validate_pyramid <- function(label, interactive, size, cols, border, border_colo
 
   if (!border && !is.null(border_color)) {
     rlang::inform("This plot border argument has been set to `FALSE` and the border color supplied will be ignored")
+  }
+
+  if (!is.logical(inverse)) {
+    rlang::abort("The value supplied to the `inverse` argument is not a logical vector. Did you forget to write the word in capital letters?")
   }
 }

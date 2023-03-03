@@ -7,6 +7,7 @@
 #' @param border logical (boolean). It determines if the individual bars should have a border or not
 #' @param border_color if the `border` argument is set to `TRUE`, the user can supplied a border color using any of the standard color formats
 #' @param sex the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR
+#' @param inverse logical (boolean). If set to `TRUE`, the pyramid plot will be inverted, starting from highest age-group to lowest
 #' @inheritParams map_lgas
 #'
 #' @return population pyramid plot
@@ -39,6 +40,7 @@ plot_pyramid <- function(
     size = NULL,
     border = TRUE,
     border_color = NULL,
+    inverse = FALSE,
     interactive = FALSE) {
   my_cols <- c("F" = "#f5c1c1", "M" = "#c1f5f5")
 
@@ -50,7 +52,7 @@ plot_pyramid <- function(
   data_age_group <- dplyr::distinct(.data, {{ age_group }}) |> dplyr::pull({{ age_group }})
 
 
-  validate_pyramid(label, interactive, size, cols, border, border_color)
+  validate_pyramid(label, interactive, size, cols, border, border_color, inverse)
 
 
   if (!is.null(age_bands) && !all(age_bands %in% data_age_group)) {
@@ -64,7 +66,16 @@ plot_pyramid <- function(
         {{ age_group }},
         levels = age_bands %||% age_cat
       )
-    ) |>
+    )
+
+  if (inverse) {
+    plot <- plot |>
+      dplyr::mutate(
+        {{ age_group }} := forcats::fct_rev({{ age_group }})
+      )
+  }
+
+ plot <- plot |>
     ggplot2::ggplot(
       ggplot2::aes(
         y = {{ age_group }},

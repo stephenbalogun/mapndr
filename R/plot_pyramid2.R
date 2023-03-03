@@ -38,6 +38,7 @@ plot_pyramid2 <- function(
     size = NULL,
     border = TRUE,
     border_color = NULL,
+    inverse = FALSE,
     interactive = FALSE) {
   my_cols <- c("F" = "#f5c1c1", "M" = "#c1f5f5")
 
@@ -48,7 +49,7 @@ plot_pyramid2 <- function(
 
   data_age_group <- dplyr::distinct(.data, {{ age_group }}) |> dplyr::pull({{ age_group }})
 
-  validate_pyramid(label, interactive, size, cols, border, border_color)
+  validate_pyramid(label, interactive, size, cols, border, border_color, inverse)
 
   if (!is.null(age_bands) && !all(age_bands %in% data_age_group)) {
     rlang::abort("The age_bands supplied is not the same as the unique entries in the data provided")
@@ -58,7 +59,7 @@ plot_pyramid2 <- function(
     dplyr::mutate(
       {{ light_fill }} := ifelse({{ sex }} == "F", {{ light_fill }} * -1, {{ light_fill }}),
       {{ dark_fill }} := ifelse({{ sex }} == "F", {{ dark_fill }} * -1, {{ dark_fill }}),
-      lab = round({{ dark_fill }} / {{ light_fill }}, digits = 2),
+      lab = round({{ dark_fill }} / {{ light_fill }}, digits = 3),
       lab = ifelse({{ sex }} == "F", .data$lab * -1, .data$lab),
       {{ age_group }} := factor(
         {{ age_group }},
@@ -68,6 +69,13 @@ plot_pyramid2 <- function(
         )
       )
     )
+
+  if (inverse) {
+    df <- df |>
+      dplyr::mutate(
+        {{ age_group }} := forcats::fct_rev({{ age_group }})
+      )
+  }
 
   if (border) {
 
@@ -109,7 +117,7 @@ plot_pyramid2 <- function(
         data = df,
         ggplot2::aes(
           x = {{ light_fill }},
-          label = scales::percent(abs(.data$lab))
+          label = scales::percent(abs(.data$lab), accuracy = 0.1)
         ),
         hjust = "outward",
         size = size %||% 3,
