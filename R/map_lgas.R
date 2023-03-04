@@ -9,8 +9,8 @@
 #' @param label_lga_color when supplied, this color will be used as font-color for the `lga` label
 #' @param label_fill_color when supplied, this color will be used as font-color for the `fill` label
 #' @param fill_colors a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors
-#' @param size_lga the font-size for the `lga` labels in whole numbers. The default is 2
-#' @param size_fill the font-size for the `fill` labels in whole numbers. The default is 2
+#' @param size_lga the font-size for the `lga` labels in whole numbers.
+#' @param size_fill the font-size for the `fill` labels in whole numbers.
 #' @param border_color the color to be used for the map boundaries. The default is black
 #' @param interactive logical (boolean), indicating whether the map should allow some level of interactivity
 #'
@@ -27,7 +27,7 @@ map_lgas <- function(
     fill,
     state = state,
     lga = lga,
-    label_lga = FALSE,
+    label_lga = TRUE,
     label_fill = FALSE,
     label_lga_color = NULL,
     label_fill_color = NULL,
@@ -42,7 +42,7 @@ map_lgas <- function(
 
   noise <- stats::runif(1, min = 0.01, max = 0.02)
 
-  validate_maps(label_lga, label_fill, size_lga, size_fill, interactive)
+  validate_lga_maps(label_lga, label_fill, size_lga, size_fill, interactive)
 
   if (!is.null(fill_colors) && length(fill_colors) > 1 && length(fill_colors) != length(unique(fill_vec))) {
     rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")

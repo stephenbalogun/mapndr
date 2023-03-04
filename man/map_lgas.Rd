@@ -9,7 +9,7 @@ map_lgas(
   fill,
   state = state,
   lga = lga,
-  label_lga = FALSE,
+  label_lga = TRUE,
   label_fill = FALSE,
   label_lga_color = NULL,
   label_fill_color = NULL,
@@ -39,9 +39,9 @@ map_lgas(
 
 \item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
 
-\item{size_lga}{the font-size for the `lga` labels in whole numbers. The default is 2}
+\item{size_lga}{the font-size for the `lga` labels in whole numbers.}
 
-\item{size_fill}{the font-size for the `fill` labels in whole numbers. The default is 2}
+\item{size_fill}{the font-size for the `fill` labels in whole numbers.}
 
 \item{border_color}{the color to be used for the map boundaries. The default is black}
 
