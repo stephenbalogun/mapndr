@@ -9,9 +9,18 @@ map_states2(
   fill,
   bubble,
   state = state,
-  label = FALSE,
-  cols = NULL,
-  size = NULL,
+  label_state = TRUE,
+  label_fill = FALSE,
+  label_bubble = FALSE,
+  label_state_color = NULL,
+  label_fill_color = NULL,
+  label_bubble_color = NULL,
+  fill_colors = NULL,
+  bubble_color = NULL,
+  size_state = NULL,
+  size_fill = NULL,
+  size_bubble = NULL,
+  border_color = NULL,
   interactive = FALSE
 )
 }
@@ -24,11 +33,29 @@ map_states2(
 
 \item{state}{the variable name of the column representing states in the data}
 
-\item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
+\item{label_state}{logical (boolean), indicating if the state should be labelled or not}
 
-\item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+\item{label_fill}{logical (boolean), indicating if the values for the `fill` data should be displayed}
 
-\item{size}{the text size of the labels in whole numbers. The default is 2}
+\item{label_bubble}{logical (boolean), indicating if the values for the `bubble` data should be displayed}
+
+\item{label_state_color}{when supplied, this color will be used as font-color for the `state` label}
+
+\item{label_fill_color}{when supplied, this color will be used as font-color for the `fill` label}
+
+\item{label_bubble_color}{when supplied, this color will be used as font-color for the `bubble` label}
+
+\item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+
+\item{bubble_color}{a string of color. When this is supplied, it overides the default color}
+
+\item{size_state}{the font-size for the `state` labels in whole numbers.}
+
+\item{size_fill}{the font-size for the `fill` labels in whole numbers.}
+
+\item{size_bubble}{the font-size for the `bubble` labels in whole numbers. The default is 2}
+
+\item{border_color}{the color to be used for the map boundaries. The default is black}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
@@ -45,6 +72,6 @@ Plot State-level Map with Bubbles
 state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
   dplyr::count(state, wt = estimate, name = "estimate")
 
-map_states2(state_data, fill = estimate, bubble = estimate, label = TRUE)
+map_states2(state_data, fill = estimate, bubble = estimate)
 
 }

@@ -7,12 +7,22 @@
 map_states3(
   .data,
   fill,
-  light_b,
-  dark_b,
+  light_bubble,
+  dark_bubble,
   state = state,
-  label = FALSE,
-  cols = NULL,
-  size = NULL,
+  label_state = TRUE,
+  label_fill = FALSE,
+  label_dark_bubble = FALSE,
+  label_state_color = NULL,
+  label_fill_color = NULL,
+  label_dark_bubble_color = NULL,
+  fill_colors = NULL,
+  light_bubble_color = NULL,
+  dark_bubble_color = NULL,
+  size_state = NULL,
+  size_fill = NULL,
+  size_dark_bubble = NULL,
+  border_color = NULL,
   interactive = FALSE
 )
 }
@@ -21,17 +31,37 @@ map_states3(
 
 \item{fill}{the variable (categorical or continuous) to be used to fill (color) the LGAs}
 
-\item{light_b}{the variable name of the column to be used for the lighter (bigger) bubble}
+\item{light_bubble}{the variable name of the column to be used for the lighter (bigger) bubble}
 
-\item{dark_b}{the variable name of the column to be used for the darker (smaller) bubble}
+\item{dark_bubble}{the variable name of the column to be used for the darker (smaller) bubble}
 
 \item{state}{the variable name of the column representing states in the data}
 
-\item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
+\item{label_state}{logical (boolean), indicating if the state should be labelled or not}
 
-\item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+\item{label_fill}{logical (boolean), indicating if the values for the `fill` data should be displayed}
 
-\item{size}{the text size of the labels in whole numbers. The default is 2}
+\item{label_dark_bubble}{logical (boolean), indicating if the values for the `dark_bubble` data should be displayed}
+
+\item{label_state_color}{when supplied, this color will be used as font-color for the `state` label}
+
+\item{label_fill_color}{when supplied, this color will be used as font-color for the `fill` label}
+
+\item{label_dark_bubble_color}{when supplied, this color will be used as font-color for the `dark_bubble` label}
+
+\item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+
+\item{light_bubble_color}{a string of color. When this is supplied, it overides the default color for the `light_bubble` plots}
+
+\item{dark_bubble_color}{a string of color. When this is supplied, it overides the default color for the `dark_bubble` plots}
+
+\item{size_state}{the font-size for the `state` labels in whole numbers.}
+
+\item{size_fill}{the font-size for the `fill` labels in whole numbers.}
+
+\item{size_dark_bubble}{the font-size for the `dark_bubble` labels in whole numbers. The default is 2}
+
+\item{border_color}{the color to be used for the map boundaries. The default is black}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
@@ -49,6 +79,6 @@ state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
   dplyr::count(state, wt = estimate, name = "estimate") |>
   dplyr::mutate(estimate_scaled = estimate * 0.8)
 
-map_states3(state_data, fill = estimate, light_b = estimate, dark_b = estimate_scaled, label = TRUE)
+map_states3(state_data, fill = estimate, light_bubble = estimate, dark_bubble = estimate_scaled)
 
 }

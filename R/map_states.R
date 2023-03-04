@@ -1,6 +1,9 @@
 #' Plot State-level Map
 #'
 #' @inheritParams map_lgas
+#' @param label_state logical (boolean), indicating if the state should be labelled or not
+#' @param label_state_color when supplied, this color will be used as font-color for the `state` label
+#' @param size_state the font-size for the `state` labels in whole numbers.
 #'
 #' @return state-level map
 #' @export
@@ -12,24 +15,30 @@
 #' state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
 #'   dplyr::count(state, wt = estimate, name = "estimate")
 #'
-#' map_states(state_data, fill = estimate, label = TRUE, interactive = TRUE)
+#' map_states(state_data, fill = estimate, interactive = TRUE)
 map_states <- function(
     .data,
     fill,
     state = state,
-    label = FALSE,
-    cols = NULL,
-    size = NULL,
+    label_state = TRUE,
+    label_fill = FALSE,
+    label_state_color = NULL,
+    label_fill_color = NULL,
+    fill_colors = NULL,
+    size_state = NULL,
+    size_fill = NULL,
+    border_color = NULL,
     interactive = FALSE) {
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
   fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
 
+  noise <- stats::runif(1, min = 0.05, max = 0.1)
 
-  validate_maps(label, interactive, size, cols)
+  validate_state_maps(label_state, label_fill, size_state, size_fill, interactive)
 
-  if (!is.null(cols) && length(cols) > 1 && length(cols) != length(unique(fill_vec))) {
-    rlang::abort("The values supplied to `col` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
+  if (!is.null(fill_colors) && length(fill_colors) > 1 && length(fill_colors) != length(unique(fill_vec))) {
+    rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
   }
 
 
@@ -40,14 +49,32 @@ map_states <- function(
       multiple = "all"
     )
 
-  if (!is.null(cols) && length(cols) == 1) {
+  lab_data <- df |>
+    dplyr::group_by(.data$state) |>
+    dplyr::summarise(
+      dplyr::across(
+        tidyselect::where(is.numeric), mean
+      ),
+      .groups = "drop"
+    )
+
+  if (!is.numeric(fill_vec)) {
+    lab_data <- df |>
+      dplyr::distinct(.data$state, {{ fill }}) |>
+      dplyr::left_join(
+        lab_data,
+        dplyr::join_by(state == {{ state }})
+      )
+  }
+
+  if (!is.null(fill_colors) && length(fill_colors) == 1) {
     p <- df |>
       ggplot2::ggplot(
         ggplot2::aes(.data$long, .data$lat, group = .data$group)
       ) +
       ggplot2::geom_polygon(
-        fill = cols,
-        color = "black"
+        fill = fill_colors,
+        color = border_color %||% "black"
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void()
@@ -58,27 +85,31 @@ map_states <- function(
       ) +
       ggplot2::geom_polygon(
         ggplot2::aes(fill = {{ fill }}),
-        color = "black"
+        color = border_color %||% "black"
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void()
   }
 
-  if (label) {
-    lab_data <- df |>
-      dplyr::group_by(.data$state) |>
-      dplyr::summarise(
-        dplyr::across(
-          tidyselect::where(is.numeric), mean
-        ),
-        .groups = "drop"
-      )
-
+  if (label_state) {
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
         ggplot2::aes(.data$long, .data$lat, label = .data$state),
-        size = size %||% 3
+        size = size_state %||% 3,
+        color = label_state_color %||% "black",
+        check_overlap = TRUE
+      )
+  }
+
+  if (label_fill) {
+    p <- p +
+      ggplot2::geom_text(
+        data = lab_data,
+        ggplot2::aes(.data$long + 1.5 * noise, .data$lat + 1.5 * noise, label = scales::comma({{ fill }})),
+        size = size_fill %||% 3,
+        color = label_fill_color %||% "black",
+        check_overlap = TRUE
       )
   }
 
@@ -89,7 +120,7 @@ map_states <- function(
 
     p <- p +
       ggplot2::scale_fill_manual(
-        values = cols %||% col_select
+        values = fill_colors %||% col_select
       )
   } else if (is.numeric(fill_vec)) {
     p <- p + ggplot2::scale_fill_viridis_c(alpha = 0.5)
