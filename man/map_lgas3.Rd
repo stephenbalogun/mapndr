@@ -7,13 +7,23 @@
 map_lgas3(
   .data,
   fill,
-  light_b,
-  dark_b,
+  light_bubble,
+  dark_bubble,
   state = state,
   lga = lga,
-  label = FALSE,
-  cols = NULL,
-  size = NULL,
+  label_lga = TRUE,
+  label_fill = FALSE,
+  label_dark_bubble = FALSE,
+  label_lga_color = NULL,
+  label_fill_color = NULL,
+  label_dark_bubble_color = NULL,
+  fill_colors = NULL,
+  light_bubble_color = NULL,
+  dark_bubble_color = NULL,
+  size_lga = NULL,
+  size_fill = NULL,
+  size_dark_bubble = NULL,
+  border_color = NULL,
   interactive = FALSE
 )
 }
@@ -22,19 +32,39 @@ map_lgas3(
 
 \item{fill}{the variable (categorical or continuous) to be used to fill (color) the LGAs}
 
-\item{light_b}{the variable name of the column to be used for the lighter (bigger) bubble}
+\item{light_bubble}{the variable name of the column to be used for the lighter (bigger) bubble}
 
-\item{dark_b}{the variable name of the column to be used for the darker (smaller) bubble}
+\item{dark_bubble}{the variable name of the column to be used for the darker (smaller) bubble}
 
 \item{state}{the variable name of the column representing states in the data}
 
 \item{lga}{the variable name of the column representing LGAs in the data}
 
-\item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
+\item{label_lga}{logical (boolean), indicating if the LGAs should be labelled or not}
 
-\item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+\item{label_fill}{logical (boolean), indicating if the values for the `fill` data should be displayed}
 
-\item{size}{the text size of the labels in whole numbers. The default is 2}
+\item{label_dark_bubble}{logical (boolean), indicating if the values for the `dark_bubble` data should be displayed}
+
+\item{label_lga_color}{when supplied, this color will be used as font-color for the `lga` label}
+
+\item{label_fill_color}{when supplied, this color will be used as font-color for the `fill` label}
+
+\item{label_dark_bubble_color}{when supplied, this color will be used as font-color for the `dark_bubble` label}
+
+\item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+
+\item{light_bubble_color}{a string of color. When this is supplied, it overides the default color for the `light_bubble` plots}
+
+\item{dark_bubble_color}{a string of color. When this is supplied, it overides the default color for the `dark_bubble` plots}
+
+\item{size_lga}{the font-size for the `lga` labels in whole numbers.}
+
+\item{size_fill}{the font-size for the `fill` labels in whole numbers.}
+
+\item{size_dark_bubble}{the font-size for the `dark_bubble` labels in whole numbers. The default is 2}
+
+\item{border_color}{the color to be used for the map boundaries. The default is black}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
@@ -48,6 +78,12 @@ Plot LGA-level Map with Two Bubbles
 
 ## map the lga_data, filling by `prev_x` and light_b by `population` and dark_b by `incidence_x`
 
-map_lgas3(lga_data, fill = prev_x, light_b = population, dark_b = incidence_x, label = TRUE)
+map_lgas3(
+lga_data,
+fill = prev_x,
+light_bubble = population,
+dark_bubble = incidence_x,
+label_dark_bubble = TRUE
+)
 
 }

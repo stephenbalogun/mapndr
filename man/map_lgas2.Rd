@@ -10,9 +10,18 @@ map_lgas2(
   bubble,
   state = state,
   lga = lga,
-  label = FALSE,
-  cols = NULL,
-  size = NULL,
+  label_lga = TRUE,
+  label_fill = FALSE,
+  label_bubble = FALSE,
+  label_lga_color = NULL,
+  label_fill_color = NULL,
+  label_bubble_color = NULL,
+  fill_colors = NULL,
+  bubble_color = NULL,
+  size_lga = NULL,
+  size_fill = NULL,
+  size_bubble = NULL,
+  border_color = NULL,
   interactive = FALSE
 )
 }
@@ -27,11 +36,29 @@ map_lgas2(
 
 \item{lga}{the variable name of the column representing LGAs in the data}
 
-\item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
+\item{label_lga}{logical (boolean), indicating if the LGAs should be labelled or not}
 
-\item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+\item{label_fill}{logical (boolean), indicating if the values for the `fill` data should be displayed}
 
-\item{size}{the text size of the labels in whole numbers. The default is 2}
+\item{label_bubble}{logical (boolean), indicating if the values for the `bubble` data should be displayed}
+
+\item{label_lga_color}{when supplied, this color will be used as font-color for the `lga` label}
+
+\item{label_fill_color}{when supplied, this color will be used as font-color for the `fill` label}
+
+\item{label_bubble_color}{when supplied, this color will be used as font-color for the `bubble` label}
+
+\item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+
+\item{bubble_color}{a string of color. When this is supplied, it overides the default color}
+
+\item{size_lga}{the font-size for the `lga` labels in whole numbers.}
+
+\item{size_fill}{the font-size for the `fill` labels in whole numbers.}
+
+\item{size_bubble}{the font-size for the `bubble` labels in whole numbers. The default is 2}
+
+\item{border_color}{the color to be used for the map boundaries. The default is black}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
@@ -45,6 +72,6 @@ Plot LGA-level Map with Bubbles
 
 ## map the lga_data accompanying the package, filling by `prev_x` and bubbles by `incidence_x`
 
-map_lgas2(lga_data, fill = prev_x, bubble = incidence_x, label = TRUE)
+map_lgas2(lga_data, fill = prev_x, bubble = incidence_x, label_lga = TRUE)
 
 }
