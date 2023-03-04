@@ -8,7 +8,11 @@
 #' @param border_color if the `border` argument is set to `TRUE`, the user can supplied a border color using any of the standard color formats
 #' @param sex the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR
 #' @param inverse logical (boolean). If set to `TRUE`, the pyramid plot will be inverted, starting from highest age-group to lowest
-#' @inheritParams map_lgas
+#' @param size The font-size of the `fill` labels in whole numbers
+#' @param fill_colors a string of colors equal to two, in the number of unique entries in the `sex` variable
+#' @param label logical (boolean), indicating if the data should be labelled or not
+#' @param .data a tabular (rectangular) data containing LGA and the variables to be plotted
+#' @param interactive logical (boolean), indicating whether the map should allow some level of interactivity
 #'
 #' @return population pyramid plot
 #' @export
@@ -36,8 +40,8 @@ plot_pyramid <- function(
     sex = sex,
     age_bands = NULL,
     label = TRUE,
-    cols = NULL,
     size = NULL,
+    fill_colors = NULL,
     border = TRUE,
     border_color = NULL,
     inverse = FALSE,
@@ -52,12 +56,17 @@ plot_pyramid <- function(
   data_age_group <- dplyr::distinct(.data, {{ age_group }}) |> dplyr::pull({{ age_group }})
 
 
-  validate_pyramid(label, interactive, size, cols, border, border_color, inverse)
+  validate_pyramid(label, interactive, size, border, border_color, inverse)
 
 
   if (!is.null(age_bands) && !all(age_bands %in% data_age_group)) {
     rlang::abort("The age_bands supplied is not the same as the unique entries in the data provided")
   }
+
+  if (!is.null(fill_colors) && length(fill_colors) != 2) {
+    rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `sex` variable!")
+  }
+
 
   plot <- .data |>
     dplyr::mutate(
@@ -120,7 +129,7 @@ plot_pyramid <- function(
         ggplot2::scale_x_continuous(
           labels = scales::label_dollar(prefix = "", style_negative = "parens")
         ) +
-        ggplot2::scale_fill_manual(values = cols %||% my_cols)
+        ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
     )
   } else {
     plot +
@@ -128,6 +137,6 @@ plot_pyramid <- function(
       ggplot2::scale_x_continuous(
         labels = scales::label_dollar(prefix = "", style_negative = "parens")
       ) +
-      ggplot2::scale_fill_manual(values = cols %||% my_cols)
+      ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
   }
 }

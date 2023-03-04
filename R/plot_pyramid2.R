@@ -34,7 +34,7 @@ plot_pyramid2 <- function(
     sex = sex,
     age_bands = NULL,
     label = TRUE,
-    cols = NULL,
+    fill_colors = NULL,
     size = NULL,
     border = TRUE,
     border_color = NULL,
@@ -49,7 +49,11 @@ plot_pyramid2 <- function(
 
   data_age_group <- dplyr::distinct(.data, {{ age_group }}) |> dplyr::pull({{ age_group }})
 
-  validate_pyramid(label, interactive, size, cols, border, border_color, inverse)
+  validate_pyramid(label, interactive, size, border, border_color, inverse)
+
+  if (!is.null(fill_colors) && length(fill_colors) != 2) {
+    rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `sex` variable!")
+  }
 
   if (!is.null(age_bands) && !all(age_bands %in% data_age_group)) {
     rlang::abort("The age_bands supplied is not the same as the unique entries in the data provided")
@@ -132,7 +136,7 @@ plot_pyramid2 <- function(
         ggplot2::scale_x_continuous(
           labels = scales::label_dollar(prefix = "", style_negative = "parens")
         ) +
-        ggplot2::scale_fill_manual(values = cols %||% my_cols)
+        ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
       )
   } else {
     plot +
@@ -140,6 +144,6 @@ plot_pyramid2 <- function(
       ggplot2::scale_x_continuous(
         labels = scales::label_dollar(prefix = "", style_negative = "parens")
       ) +
-      ggplot2::scale_fill_manual(values = cols %||% my_cols)
+      ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
   }
 }

@@ -12,7 +12,7 @@ plot_pyramid2(
   sex = sex,
   age_bands = NULL,
   label = TRUE,
-  cols = NULL,
+  fill_colors = NULL,
   size = NULL,
   border = TRUE,
   border_color = NULL,
@@ -34,11 +34,11 @@ plot_pyramid2(
 \item{age_bands}{a vector of age-bands contained in the data to be used for age-categorization, if different from
 c( "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65+")}
 
-\item{label}{logical (boolean), indicating if the LGAs should be labelled or not}
+\item{label}{logical (boolean), indicating if the data should be labelled or not}
 
-\item{cols}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
+\item{fill_colors}{a string of colors equal to two, in the number of unique entries in the `sex` variable}
 
-\item{size}{the text size of the labels in whole numbers. The default is 2}
+\item{size}{The font-size of the `fill` labels in whole numbers}
 
 \item{border}{logical (boolean). It determines if the individual bars should have a border or not}
 
