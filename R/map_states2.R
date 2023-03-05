@@ -133,7 +133,7 @@ map_states2 <- function(
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long, .data$lat, label = scales::comma(round({{ bubble }}))),
+        ggplot2::aes(.data$long, .data$lat, label = {{ bubble }}),
         size = size_bubble %||% 3,
         color = label_bubble_color %||% "#ffffff",
         check_overlap = TRUE

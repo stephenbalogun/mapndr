@@ -10,6 +10,7 @@ plot_pyramid2(
   dark_fill,
   age_group = age_group,
   sex = sex,
+  digits = NULL,
   age_bands = NULL,
   label = TRUE,
   fill_colors = NULL,
@@ -30,6 +31,8 @@ plot_pyramid2(
 \item{age_group}{the variable name in the data that contains the different age-band}
 
 \item{sex}{the variable name that contains the sex (gender) in the supplied data. The `sex` should be in the "M" and "F" format as commonly seen on the NDR}
+
+\item{digits}{The number of significant numbers to be used for the proportion/ratio}
 
 \item{age_bands}{a vector of age-bands contained in the data to be used for age-categorization, if different from
 c( "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65+")}

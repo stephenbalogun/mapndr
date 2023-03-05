@@ -151,7 +151,7 @@ map_states3 <- function(
       ggplot2::geom_text(
         data = lab_data,
         ggplot2::aes(
-          .data$long, .data$lat, label = scales::comma(round({{ dark_bubble }}))
+          .data$long, .data$lat, label = scales::comma({{ dark_bubble }})
         ),
         size = size_dark_bubble %||% 2,
         color = label_dark_bubble_color %||% "#ffffff",

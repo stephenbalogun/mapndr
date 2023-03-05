@@ -3,6 +3,7 @@
 #' @param light_fill the variable name in the data to be used to fill the bar (the lighter color)
 #' @param dark_fill the variable name of the smaller values for the darker (shorter) fill
 #' @inheritParams plot_pyramid
+#' @param digits The number of significant numbers to be used for the proportion/ratio
 #'
 #' @return population pyramid plot
 #' @export
@@ -32,6 +33,7 @@ plot_pyramid2 <- function(
     dark_fill,
     age_group = age_group,
     sex = sex,
+    digits = NULL,
     age_bands = NULL,
     label = TRUE,
     fill_colors = NULL,
@@ -59,11 +61,15 @@ plot_pyramid2 <- function(
     rlang::abort("The age_bands supplied is not the same as the unique entries in the data provided")
   }
 
+  if (!is.null(digits) && !is.numeric(digits)) {
+    rlang::abort("`digits` value must be in whole numbers")
+  }
+
   df <- .data |>
     dplyr::mutate(
       {{ light_fill }} := ifelse({{ sex }} == "F", {{ light_fill }} * -1, {{ light_fill }}),
       {{ dark_fill }} := ifelse({{ sex }} == "F", {{ dark_fill }} * -1, {{ dark_fill }}),
-      lab = round({{ dark_fill }} / {{ light_fill }}, digits = 3),
+      lab = round({{ dark_fill }} / {{ light_fill }}, digits = digits %||% 3),
       lab = ifelse({{ sex }} == "F", .data$lab * -1, .data$lab),
       {{ age_group }} := factor(
         {{ age_group }},
@@ -121,7 +127,7 @@ plot_pyramid2 <- function(
         data = df,
         ggplot2::aes(
           x = {{ light_fill }},
-          label = scales::percent(abs(.data$lab), accuracy = 0.1)
+          label = scales::percent(abs(.data$lab))
         ),
         hjust = "outward",
         size = size %||% 3,
