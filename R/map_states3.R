@@ -106,7 +106,7 @@ map_states3 <- function(
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void() +
-      ggplot2::scale_size(range = c(0, 15))
+      ggplot2::scale_size(range = c(2, 15))
   } else {
     p <- df |>
       ggplot2::ggplot(
@@ -131,7 +131,7 @@ map_states3 <- function(
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void() +
-      ggplot2::scale_size(range = c(0, 15))
+      ggplot2::scale_size(range = c(2, 15))
   }
 
 
