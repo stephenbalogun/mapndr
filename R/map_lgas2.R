@@ -99,7 +99,7 @@ map_lgas2 <- function(
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void() +
-      ggplot2::scale_size(range = c(1, 5))
+      ggplot2::scale_size_area(max_size = 10)
   } else {
     p <- df |>
       ggplot2::ggplot(
@@ -117,7 +117,7 @@ map_lgas2 <- function(
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void() +
-      ggplot2::scale_size(range = c(1, 5))
+      ggplot2::scale_size_area(max_size = 10)
   }
 
 
