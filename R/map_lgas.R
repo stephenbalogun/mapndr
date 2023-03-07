@@ -151,7 +151,7 @@ map_lgas <- function(
       option = gradient %||% "E",
       na.value = na_fill %||% "pink",
       direction = grad_direction %||% -1
-      )
+    )
   }
 
   if (interactive) {

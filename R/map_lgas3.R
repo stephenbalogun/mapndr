@@ -18,11 +18,11 @@
 #' ## map the lga_data, filling by `prev_x` and light_b by `population` and dark_b by `incidence_x`
 #'
 #' map_lgas3(
-#' lga_data,
-#' fill = prev_x,
-#' light_bubble = population,
-#' dark_bubble = incidence_x,
-#' label_dark_bubble = TRUE
+#'   lga_data,
+#'   fill = prev_x,
+#'   light_bubble = population,
+#'   dark_bubble = incidence_x,
+#'   label_dark_bubble = TRUE
 #' )
 #'
 map_lgas3 <- function(
@@ -213,7 +213,7 @@ map_lgas3 <- function(
         option = gradient %||% "E",
         na.value = na_fill %||% "pink",
         direction = grad_direction %||% -1
-        )
+      )
   }
 
   if (interactive) {

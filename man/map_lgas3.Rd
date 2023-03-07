@@ -91,11 +91,11 @@ Plot LGA-level Map with Two Bubbles
 ## map the lga_data, filling by `prev_x` and light_b by `population` and dark_b by `incidence_x`
 
 map_lgas3(
-lga_data,
-fill = prev_x,
-light_bubble = population,
-dark_bubble = incidence_x,
-label_dark_bubble = TRUE
+  lga_data,
+  fill = prev_x,
+  light_bubble = population,
+  dark_bubble = incidence_x,
+  label_dark_bubble = TRUE
 )
 
 }
