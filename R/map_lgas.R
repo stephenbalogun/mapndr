@@ -12,7 +12,11 @@
 #' @param size_lga the font-size for the `lga` labels in whole numbers.
 #' @param size_fill the font-size for the `fill` labels in whole numbers.
 #' @param border_color the color to be used for the map boundaries. The default is black
+#' @param border_width the thickness of the border line numbers
 #' @param interactive logical (boolean), indicating whether the map should allow some level of interactivity
+#' @param gradient when map is filled by a continuous variable, a gradient color can be supplied. The options are "A" to "H". The default is "E"
+#' @param grad_direction, the gradient direction can be reversed by negating the current value. The default is `-1`. The reverse will take a value of `1`
+#' @param na_fill the fill color to be used for locations with missing value. The default is `pink`
 #'
 #' @return LGA-level map
 #' @export
@@ -35,6 +39,10 @@ map_lgas <- function(
     size_lga = NULL,
     size_fill = NULL,
     border_color = NULL,
+    border_width = NULL,
+    gradient = NULL,
+    grad_direction = NULL,
+    na_fill = NULL,
     interactive = FALSE) {
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
@@ -75,7 +83,7 @@ map_lgas <- function(
         dplyr::join_by(
           state == {{ state }},
           lga == {{ lga }}
-          )
+        )
       )
   }
 
@@ -87,7 +95,8 @@ map_lgas <- function(
       ) +
       ggplot2::geom_polygon(
         fill = fill_colors,
-        color = border_color %||% "black"
+        color = border_color %||% "black",
+        linewidth = border_width %||% 0.5,
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void()
@@ -98,7 +107,8 @@ map_lgas <- function(
       ) +
       ggplot2::geom_polygon(
         ggplot2::aes(fill = {{ fill }}),
-        color = border_color %||% "black"
+        color = border_color %||% "black",
+        linewidth = border_width %||% 0.5
       ) +
       ggplot2::coord_sf() +
       ggplot2::theme_void()
@@ -136,7 +146,12 @@ map_lgas <- function(
         values = fill_colors %||% col_select
       )
   } else if (is.numeric(fill_vec)) {
-    p <- p + ggplot2::scale_fill_viridis_c(alpha = 0.5)
+    p <- p + ggplot2::scale_fill_viridis_c(
+      alpha = 0.5,
+      option = gradient %||% "E",
+      na.value = na_fill %||% "pink",
+      direction = grad_direction %||% -1
+      )
   }
 
   if (interactive) {

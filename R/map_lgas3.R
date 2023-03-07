@@ -45,6 +45,10 @@ map_lgas3 <- function(
     size_fill = NULL,
     size_dark_bubble = NULL,
     border_color = NULL,
+    border_width = NULL,
+    gradient = NULL,
+    grad_direction = NULL,
+    na_fill = NULL,
     interactive = FALSE) {
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
@@ -103,7 +107,8 @@ map_lgas3 <- function(
       ggplot2::geom_polygon(
         ggplot2::aes(.data$long, .data$lat, group = .data$lga),
         fill = fill_colors,
-        color = border_color %||% "black"
+        color = border_color %||% "black",
+        linewidth = border_width %||% 0.5
       ) +
       ggplot2::geom_point(
         data = lab_data,
@@ -130,7 +135,8 @@ map_lgas3 <- function(
       ) +
       ggplot2::geom_polygon(
         ggplot2::aes(fill = {{ fill }}),
-        color = border_color %||% "black"
+        color = border_color %||% "black",
+        linewidth = border_width %||% 0.5
       ) +
       ggplot2::geom_point(
         data = lab_data,
@@ -201,7 +207,13 @@ map_lgas3 <- function(
         values = fill_colors %||% col_select
       )
   } else if (is.numeric(fill_vec)) {
-    p <- p + ggplot2::scale_fill_viridis_c(alpha = 0.5)
+    p <- p +
+      ggplot2::scale_fill_viridis_c(
+        alpha = 0.5,
+        option = gradient %||% "E",
+        na.value = na_fill %||% "pink",
+        direction = grad_direction %||% -1
+        )
   }
 
   if (interactive) {
