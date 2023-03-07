@@ -88,7 +88,6 @@ plot_pyramid2 <- function(
   }
 
   if (border) {
-
     plot <- df |>
       ggplot2::ggplot(
         ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
@@ -105,7 +104,6 @@ plot_pyramid2 <- function(
         color = border_color %||% "#777777"
       )
   } else {
-
     plot <- df |>
       ggplot2::ggplot(
         ggplot2::aes(y = {{ age_group }}, fill = {{ sex }})
@@ -143,7 +141,7 @@ plot_pyramid2 <- function(
           labels = scales::label_dollar(prefix = "", style_negative = "parens")
         ) +
         ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
-      )
+    )
   } else {
     plot +
       ggplot2::theme_classic() +

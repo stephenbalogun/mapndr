@@ -84,7 +84,7 @@ plot_pyramid <- function(
       )
   }
 
- plot <- plot |>
+  plot <- plot |>
     ggplot2::ggplot(
       ggplot2::aes(
         y = {{ age_group }},

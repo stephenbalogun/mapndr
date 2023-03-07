@@ -3,12 +3,14 @@ validate_lga_maps <- function(
     label_fill,
     size_lga,
     size_fill,
+    # gradient,
+    # grad_direction,
     interactive) {
   if (!is.logical(label_lga)) {
     rlang::abort("The value supplied to the `label_lga` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
 
-  if (!label_lga && !is.null(size_lga))  {
+  if (!label_lga && !is.null(size_lga)) {
     rlang::inform("The `label_lga` value is currently set to `FALSE`. Therefore, you cannot have a font-size for the lga labels and the argument is ignored. Do you want to set the `label_lga` value to `TRUE`?")
   }
 
@@ -16,7 +18,7 @@ validate_lga_maps <- function(
     rlang::abort("The value supplied to the `label_fill` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
 
-  if (!label_fill && !is.null(size_fill))  {
+  if (!label_fill && !is.null(size_fill)) {
     rlang::inform("The `label_fill` value is currently set to `FALSE`. Therefore, you cannot have a font-size for the fill labels and the argument is ignored. Do you want to set the `label_fill` value to `TRUE`?")
   }
 
@@ -28,10 +30,13 @@ validate_lga_maps <- function(
     rlang::abort("`size_fill` value must be in numbers")
   }
 
+  # if (is.null(gradient) && !is.null(grad_direction)) {
+  #   rlang::inform("Ignoring `grad_direction` argument as the `gradient` argument is currently set to NULL")
+  # }
+
   if (!is.logical(interactive)) {
     rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
   }
-
 }
 
 
@@ -46,7 +51,7 @@ validate_state_maps <- function(
     rlang::abort("The value supplied to the `label_state` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
 
-  if (!label_state && !is.null(size_state))  {
+  if (!label_state && !is.null(size_state)) {
     rlang::inform("The `label_state` value is currently set to `FALSE`. Therefore, you cannot have a font-size for the state labels and the argument is ignored. Do you want to set the `label_state` value to `TRUE`?")
   }
 
@@ -54,7 +59,7 @@ validate_state_maps <- function(
     rlang::abort("The value supplied to the `label_fill` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
 
-  if (!label_fill && !is.null(size_fill))  {
+  if (!label_fill && !is.null(size_fill)) {
     rlang::inform("The `label_fill` value is currently set to `FALSE`. Therefore, you cannot have a font-size for the fill labels and the argument is ignored. Do you want to set the `label_fill` value to `TRUE`?")
   }
 
@@ -69,7 +74,6 @@ validate_state_maps <- function(
   if (!is.logical(interactive)) {
     rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
   }
-
 }
 
 validate_pyramid <- function(label, interactive, size, border, border_color, inverse) {
