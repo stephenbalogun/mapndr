@@ -23,6 +23,10 @@ map_states3(
   size_fill = NULL,
   size_dark_bubble = NULL,
   border_color = NULL,
+  border_width = NULL,
+  gradient = NULL,
+  grad_direction = NULL,
+  na_fill = NULL,
   interactive = FALSE
 )
 }
@@ -62,6 +66,14 @@ map_states3(
 \item{size_dark_bubble}{the font-size for the `dark_bubble` labels in whole numbers. The default is 2}
 
 \item{border_color}{the color to be used for the map boundaries. The default is black}
+
+\item{border_width}{the thickness of the border line numbers}
+
+\item{gradient}{when map is filled by a continuous variable, a gradient color can be supplied. The options are "A" to "H". The default is "E"}
+
+\item{grad_direction}{the gradient direction can be reversed by negating the current value. The default is `-1`. The reverse will take a value of `1`}
+
+\item{na_fill}{the fill color to be used for locations with missing value. The default is `pink`}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }

@@ -35,6 +35,10 @@ map_states3 <- function(
     size_fill = NULL,
     size_dark_bubble = NULL,
     border_color = NULL,
+    border_width = NULL,
+    gradient = NULL,
+    grad_direction = NULL,
+    na_fill = NULL,
     interactive = FALSE) {
   states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
 
@@ -90,7 +94,7 @@ map_states3 <- function(
         ggplot2::aes(.data$long, .data$lat, group = .data$group),
         fill = fill_colors,
         color = border_color %||% "black",
-        linewidth = 0.8
+        linewidth = border_width %||% 0.5
       ) +
       ggplot2::geom_point(
         data = lab_data,
@@ -115,7 +119,7 @@ map_states3 <- function(
       ggplot2::geom_polygon(
         ggplot2::aes(fill = {{ fill }}),
         color = border_color %||% "black",
-        linewidth = 0.8
+        linewidth = border_width %||% 0.5
       ) +
       ggplot2::geom_point(
         data = lab_data,
@@ -151,7 +155,8 @@ map_states3 <- function(
       ggplot2::geom_text(
         data = lab_data,
         ggplot2::aes(
-          .data$long, .data$lat, label = scales::comma({{ dark_bubble }})
+          .data$long, .data$lat,
+          label = scales::comma({{ dark_bubble }})
         ),
         size = size_dark_bubble %||% 2,
         color = label_dark_bubble_color %||% "#ffffff",
@@ -160,7 +165,6 @@ map_states3 <- function(
   }
 
   if (label_fill) {
-
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
@@ -173,7 +177,6 @@ map_states3 <- function(
         color = label_fill_color %||% "black",
         check_overlap = TRUE
       )
-
   }
 
   if (is.character(fill_vec) | is.factor(fill_vec)) {
@@ -186,7 +189,12 @@ map_states3 <- function(
         values = fill_colors %||% col_select
       )
   } else if (is.numeric(fill_vec)) {
-    p <- p + ggplot2::scale_fill_viridis_c(alpha = 0.5)
+    p <- p + ggplot2::scale_fill_viridis_c(
+      alpha = 0.5,
+      option = gradient %||% "E",
+      na.value = na_fill %||% "pink",
+      direction = grad_direction %||% -1
+    )
   }
 
   if (interactive) {
