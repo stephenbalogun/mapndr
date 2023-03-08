@@ -95,8 +95,8 @@ map_lgas3 <- function(
       dplyr::left_join(
         lab_data,
         dplyr::join_by(
-          state == {{ state }},
-          lga == {{ lga }}
+          state,
+          lga
         )
       )
   }

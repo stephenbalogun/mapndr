@@ -82,7 +82,7 @@ map_states3 <- function(
       dplyr::distinct(.data$state, {{ fill }}) |>
       dplyr::left_join(
         lab_data,
-        dplyr::join_by(state == {{ state }})
+        dplyr::join_by(state)
       )
   }
 
