@@ -186,7 +186,8 @@ map_states3 <- function(
 
     p <- p +
       ggplot2::scale_fill_manual(
-        values = fill_colors %||% col_select
+        values = fill_colors %||% col_select,
+        na.value = na_fill %||% "pink"
       )
   } else if (is.numeric(fill_vec)) {
     p <- p + ggplot2::scale_fill_viridis_c(
