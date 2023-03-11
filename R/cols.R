@@ -24,23 +24,25 @@ my_cols <- function(n) {
 
   switch(n,
     "Too little. Choose between 2 and 7 categories",
-    c(cols[2], cols[6]),
-    c(cols[2], cols[5], cols[7]),
-    c(cols[1], cols[3], cols[5], cols[7]),
-    c(cols[1], cols[3], cols[5], cols[6], cols[8]),
-    c(cols[1], cols[2], cols[4], cols[5], cols[6], cols[8]),
-    c(cols[1], cols[2], cols[4], cols[5], cols[6], cols[7], cols[8]),
+    c(cols[c(2, 6)]),
+    c(cols[c(2, 5, 7)]),
+    c(cols[c(1, 3, 5, 7)]),
+    c(cols[c(1, 3, 5, 6, 8)]),
+    c(cols[c(1, 2, 4, 5, 6, 8)]),
+    c(cols[c(1, 2, 4, 5, 6, 7, 8)]),
     "Too many categories in the data. Choose between 2 and 7 categories"
   )
 }
 
-# switch(n,
-#        `1` = "Too little. Choose between 2 and 7 categories",
-#        `2` = c(cols[2], cols[6]),
-#        `3` = c(cols[2], cols[5], cols[7]),
-#        `4` = c(cols[1], cols[3], cols[5], cols[7]),
-#        `5` = c(cols[1], cols[3], cols[5], cols[6], cols[8]),
-#        `6` = c(cols[1], cols[2], cols[4], cols[5], cols[6], cols[8]),
-#        `7` = c(cols[1], cols[2], cols[4], cols[5], cols[6], cols[7], cols[8]),
-#        "Too many categories in the data. Choose between 2 and 7 categories"
-#        )
+
+off_white <- function() {
+  "#fcfcfc"
+}
+
+border_grey <- function() {
+  "#787778"
+}
+
+label_grey <- function() {
+  "#403f40"
+}
