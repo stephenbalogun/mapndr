@@ -19,16 +19,13 @@ spectrum <- function(major = 6, minor = 19, year = 2022, state = NULL) {
     rlang::abort("The values to `year`, `major` and `minor` must all be integers!")
   }
 
-
   if (nchar(major) != 1 || nchar(minor) > 2) {
     rlang::abort("`major` and `minor` values should be supplied separately and as whole numbers")
   }
 
-
   if (!is.null(state) && all(!state %in% c(naijR::states(), "FCT"))) {
     rlang::abort("state must be any or a combination of the recognized Nigeria states based on NDR format")
   }
-
 
   df <- if (major == 6 && minor == 19) {
     spectrum_619() |>
