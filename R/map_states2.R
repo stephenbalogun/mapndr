@@ -22,7 +22,7 @@ map_states2 <- function(
     state = state,
     label_state = TRUE,
     label_fill = FALSE,
-    label_bubble = FALSE,
+    label_bubble = TRUE,
     label_state_color = NULL,
     label_fill_color = NULL,
     label_bubble_color = NULL,
@@ -36,26 +36,37 @@ map_states2 <- function(
     gradient = NULL,
     grad_direction = NULL,
     na_fill = NULL,
+    all_regions = FALSE,
     interactive = FALSE) {
-  states <- dplyr::distinct(.data, {{ state }}) |> dplyr::pull({{ state }})
+  states <- dplyr::pull(.data, {{ state }}) |> unique()
 
-  fill_vec <- dplyr::select(.data, {{ fill }}) |> dplyr::pull({{ fill }})
+  fill_vec <- dplyr::pull(.data, {{ fill }}) |> unique()
+
 
   noise <- stats::runif(1, min = 0.05, max = 0.1)
 
-  validate_state_maps(label_state, label_fill, size_state, size_fill, interactive)
+  validate_state_maps(label_state, label_fill, size_state, size_fill, all_regions, interactive)
 
   if (!is.null(fill_colors) && length(fill_colors) > 1 && length(fill_colors) != length(unique(fill_vec))) {
     rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
   }
 
+  if (all(unique(naijR::lgas_nigeria$state) %in% states) || all_regions) {
+    df <- ndr_states() |>
+      dplyr::left_join(
+        .data,
+        dplyr::join_by(state == {{ state }}),
+        multiple = "all"
+      )
+  } else {
+    df <- ndr_states(states) |>
+      dplyr::left_join(
+        .data,
+        dplyr::join_by(state == {{ state }}, ),
+        multiple = "all"
+      )
+  }
 
-  df <- ndr_states(states) |>
-    dplyr::left_join(
-      .data,
-      dplyr::join_by(state == {{ state }}),
-      multiple = "all"
-    )
 
   lab_data <- df |>
     dplyr::group_by(.data$state) |>
@@ -86,17 +97,14 @@ map_states2 <- function(
       ggplot2::geom_polygon(
         ggplot2::aes(.data$long, .data$lat, group = .data$group),
         fill = fill_colors,
-        color = border_color %||% "black",
-        linewidth = border_width %||% 0.5
+        color = border_color %||% border_grey(),
+        linewidth = border_width %||% 0.3
       ) +
       ggplot2::geom_point(
         data = lab_data,
         ggplot2::aes(.data$long, .data$lat, size = {{ bubble }}),
-        alpha = 0.5
-      ) +
-      ggplot2::coord_sf() +
-      ggplot2::theme_void() +
-      ggplot2::scale_size_area(max_size = 10)
+        color = bubble_color %||% border_grey()
+      )
   } else {
     p <- df |>
       ggplot2::ggplot(
@@ -104,18 +112,14 @@ map_states2 <- function(
       ) +
       ggplot2::geom_polygon(
         ggplot2::aes(fill = {{ fill }}),
-        color = border_color %||% "black",
-        linewidth = border_width %||% 0.5
+        color = border_color %||% border_grey(),
+        linewidth = border_width %||% 0.3
       ) +
       ggplot2::geom_point(
         data = lab_data,
         ggplot2::aes(.data$long, .data$lat, size = {{ bubble }}),
-        color = bubble_color %||% "black",
-        alpha = 0.5
-      ) +
-      ggplot2::coord_sf() +
-      ggplot2::theme_void() +
-      ggplot2::scale_size_area(max_size = 10)
+        color = bubble_color %||% border_grey()
+      )
   }
 
   if (label_state) {
@@ -124,7 +128,7 @@ map_states2 <- function(
         data = lab_data,
         ggplot2::aes(.data$long2, .data$lat2, label = .data$state),
         size = size_state %||% 3,
-        color = label_state_color %||% "black",
+        color = label_state_color %||% label_grey(),
         check_overlap = TRUE
       )
   }
@@ -134,7 +138,7 @@ map_states2 <- function(
     p <- p +
       ggplot2::geom_text(
         data = lab_data,
-        ggplot2::aes(.data$long, .data$lat, label = {{ bubble }}),
+        ggplot2::aes(.data$long, .data$lat, label = ifelse(any({{ bubble }} < 1), {{ bubble }}, scales::comma({{ bubble }}))),
         size = size_bubble %||% 3,
         color = label_bubble_color %||% "#ffffff",
         check_overlap = TRUE
@@ -148,34 +152,42 @@ map_states2 <- function(
         data = lab_data,
         ggplot2::aes(.data$long2 + noise, .data$lat2 + noise, label = ({{ fill }})),
         size = size_fill %||% 3,
-        color = label_fill_color %||% "#ffffff",
+        color = label_fill_color %||% label_grey(),
         check_overlap = TRUE
       )
   }
 
   if (is.character(fill_vec) | is.factor(fill_vec)) {
-    col_select <- my_cols(length(unique(fill_vec)))
+    col_select <- my_cols(length(fill_vec))
 
-    col_select <- stats::setNames(col_select, sort(unique(fill_vec)))
+    col_select <- stats::setNames(col_select, sort(fill_vec))
 
     p <- p +
       ggplot2::scale_fill_manual(
         values = fill_colors %||% col_select,
-        na.value = na_fill %||% "pink"
+        na.value = na_fill %||% off_white()
       )
   } else if (is.numeric(fill_vec)) {
     p <- p +
       ggplot2::scale_fill_viridis_c(
         alpha = 0.5,
         option = gradient %||% "E",
-        na.value = na_fill %||% "pink",
+        na.value = na_fill %||% off_white(),
         direction = grad_direction %||% -1
       )
   }
 
   if (interactive) {
-    plotly::ggplotly(p)
+    plotly::ggplotly(
+      p +
+        ggplot2::coord_sf() +
+        ggplot2::theme_void() +
+        ggplot2::scale_size_area(max_size = 15, guide = "none")
+    )
   } else {
-    p
+    p +
+      ggplot2::coord_sf() +
+      ggplot2::theme_void() +
+      ggplot2::scale_size_area(max_size = 15, guide = "none")
   }
 }
