@@ -4,7 +4,7 @@
 \alias{ndr_lgas}
 \title{Coordinates of Nigeria LGAs}
 \usage{
-ndr_lgas(state)
+ndr_lgas(state = NULL)
 }
 \arguments{
 \item{state}{string (character). The names of state (or LGA)}

@@ -14,23 +14,38 @@
 #' ## get LGA coordinates for Anambra and Kogi
 #' ana_kog_coord <- ndr_lgas(c("Anambra", "Kogi"))
 #'
-ndr_lgas <- function(state) {
-  if (all(!state %in% c(naijR::states(), "FCT"))) {
+ndr_lgas <- function(state = NULL) {
+  if (!is.null(state) && !all(state %in% c(naijR::states(), "FCT"))) {
     rlang::abort("state must be any or a combination of the recognized Nigeria states based on NDR format")
   }
 
-  state <- stringr::str_replace_all(state, "FCT", "Federal Capital Territory")
+  if (!is.null(state)) {
+    state <- stringr::str_replace_all(state, "FCT", "Federal Capital Territory")
+  }
 
-  st <- naijR::lgas_nigeria |>
-    dplyr::filter(.data$state %in% state) |>
-    dplyr::select(.data$lga, .data$state)
 
-  purrr::map_df(
-    state,
-    ~ ggplot2::map_data(
-      naijR::map_ng(naijR::lgas(.))
+  if (is.null(state) || all(unique(naijR::lgas_nigeria$state) %in% state)) {
+    st <- naijR::lgas_nigeria |>
+      dplyr::select(.data$lga, .data$state)
+
+    ndr_lgas <- ggplot2::map_data(
+      naijR::map_ng(naijR::lgas())
     )
-  ) |>
+  } else {
+    st <- naijR::lgas_nigeria |>
+      dplyr::filter(.data$state %in% state) |>
+      dplyr::select(.data$lga, .data$state)
+
+    ndr_lgas <- purrr::map(
+      state,
+      \(state) ggplot2::map_data(
+        naijR::map_ng(naijR::lgas(state))
+      )
+    ) |>
+      purrr::list_rbind()
+  }
+
+  ndr_lgas |>
     dplyr::rename(lga = .data$region) |>
     dplyr::select(-tidyselect::last_col()) |>
     dplyr::left_join(st, by = "lga", multiple = "all") |>
@@ -39,6 +54,8 @@ ndr_lgas <- function(state) {
       state = ifelse(state == "Federal Capital Territory", "FCT", state)
     )
 }
+
+
 
 diff <- function() {
   c(
