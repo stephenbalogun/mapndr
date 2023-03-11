@@ -5,7 +5,6 @@
 #' @importFrom forcats fct_collapse
 #' @importFrom rlang %||%
 #' @importFrom rlang .data
-#' @importFrom rlang .env
 #' @importFrom rlang :=
 ## usethis namespace: end
 NULL
