@@ -7,26 +7,28 @@
 map_states3(
   .data,
   fill,
-  light_bubble,
-  dark_bubble,
+  big_bubble,
+  small_bubble,
   state = state,
   label_state = TRUE,
   label_fill = FALSE,
-  label_dark_bubble = FALSE,
+  label_small_bubble = TRUE,
   label_state_color = NULL,
   label_fill_color = NULL,
-  label_dark_bubble_color = NULL,
+  label_small_bubble_color = NULL,
   fill_colors = NULL,
-  light_bubble_color = NULL,
-  dark_bubble_color = NULL,
+  big_bubble_color = NULL,
+  small_bubble_color = NULL,
+  bubble_transparency = NULL,
   size_state = NULL,
   size_fill = NULL,
-  size_dark_bubble = NULL,
+  size_small_bubble = NULL,
   border_color = NULL,
   border_width = NULL,
   gradient = NULL,
   grad_direction = NULL,
   na_fill = NULL,
+  all_regions = FALSE,
   interactive = FALSE
 )
 }
@@ -35,9 +37,9 @@ map_states3(
 
 \item{fill}{the variable (categorical or continuous) to be used to fill (color) the LGAs}
 
-\item{light_bubble}{the variable name of the column to be used for the lighter (bigger) bubble}
+\item{big_bubble}{the variable name of the column to be used for the lighter (bigger) bubble}
 
-\item{dark_bubble}{the variable name of the column to be used for the darker (smaller) bubble}
+\item{small_bubble}{the variable name of the column to be used for the darker (smaller) bubble}
 
 \item{state}{the variable name of the column representing states in the data}
 
@@ -45,25 +47,27 @@ map_states3(
 
 \item{label_fill}{logical (boolean), indicating if the values for the `fill` data should be displayed}
 
-\item{label_dark_bubble}{logical (boolean), indicating if the values for the `dark_bubble` data should be displayed}
+\item{label_small_bubble}{logical (boolean), indicating if the values for the `small_bubble` data should be displayed}
 
 \item{label_state_color}{when supplied, this color will be used as font-color for the `state` label}
 
 \item{label_fill_color}{when supplied, this color will be used as font-color for the `fill` label}
 
-\item{label_dark_bubble_color}{when supplied, this color will be used as font-color for the `dark_bubble` label}
+\item{label_small_bubble_color}{when supplied, this color will be used as font-color for the `small_bubble` label}
 
 \item{fill_colors}{a string of colors equal to the number of categories contained in the `fill` variable. When this is supplied, it overides the default colors and allow the user to choose specific colors}
 
-\item{light_bubble_color}{a string of color. When this is supplied, it overides the default color for the `light_bubble` plots}
+\item{big_bubble_color}{a string of color. When this is supplied, it overides the default color for the `big_bubble` plots}
 
-\item{dark_bubble_color}{a string of color. When this is supplied, it overides the default color for the `dark_bubble` plots}
+\item{small_bubble_color}{a string of color. When this is supplied, it overides the default color for the `small_bubble` plots}
+
+\item{bubble_transparency}{the alpha transparency of the bubbles. Value ranges from 0 (transparent) to 1(solid)}
 
 \item{size_state}{the font-size for the `state` labels in whole numbers.}
 
 \item{size_fill}{the font-size for the `fill` labels in whole numbers.}
 
-\item{size_dark_bubble}{the font-size for the `dark_bubble` labels in whole numbers. The default is 2}
+\item{size_small_bubble}{the font-size for the `small_bubble` labels in whole numbers. The default is 2}
 
 \item{border_color}{the color to be used for the map boundaries. The default is black}
 
@@ -74,6 +78,8 @@ map_states3(
 \item{grad_direction}{the gradient direction can be reversed by negating the current value. The default is `-1`. The reverse will take a value of `1`}
 
 \item{na_fill}{the fill color to be used for locations with missing value. The default is `pink`}
+
+\item{all_regions}{logical (boolean), indicating if the Nigeria LGAs should be used for the map}
 
 \item{interactive}{logical (boolean), indicating whether the map should allow some level of interactivity}
 }
@@ -91,6 +97,6 @@ state_data <- spectrum(state = c("Ondo", "Oyo", "Osun", "Ogun")) |>
   dplyr::count(state, wt = estimate, name = "estimate") |>
   dplyr::mutate(estimate_scaled = estimate * 0.8)
 
-map_states3(state_data, fill = estimate, light_bubble = estimate, dark_bubble = estimate_scaled)
+map_states3(state_data, fill = estimate, big_bubble = estimate, small_bubble = estimate_scaled)
 
 }
