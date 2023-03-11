@@ -3,8 +3,7 @@ validate_lga_maps <- function(
     label_fill,
     size_lga,
     size_fill,
-    # gradient,
-    # grad_direction,
+    all_regions,
     interactive) {
   if (!is.logical(label_lga)) {
     rlang::abort("The value supplied to the `label_lga` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
@@ -30,9 +29,9 @@ validate_lga_maps <- function(
     rlang::abort("`size_fill` value must be in numbers")
   }
 
-  # if (is.null(gradient) && !is.null(grad_direction)) {
-  #   rlang::inform("Ignoring `grad_direction` argument as the `gradient` argument is currently set to NULL")
-  # }
+  if (!is.logical(all_regions)) {
+    rlang::abort("The value supplied to the `all_regions` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
+  }
 
   if (!is.logical(interactive)) {
     rlang::abort("The interactive value supplied is not a logical vector. Did you forget to write the word in capital letters?")
@@ -46,6 +45,7 @@ validate_state_maps <- function(
     label_fill,
     size_state,
     size_fill,
+    all_regions,
     interactive) {
   if (!is.logical(label_state)) {
     rlang::abort("The value supplied to the `label_state` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
@@ -61,6 +61,10 @@ validate_state_maps <- function(
 
   if (!label_fill && !is.null(size_fill)) {
     rlang::inform("The `label_fill` value is currently set to `FALSE`. Therefore, you cannot have a font-size for the fill labels and the argument is ignored. Do you want to set the `label_fill` value to `TRUE`?")
+  }
+
+  if (!is.logical(all_regions)) {
+    rlang::abort("The value supplied to the `all_regions` argument is not a logical vector. Logical vectors in R are written in capital letters and unquoted. Did you forget to write the word in capital letters or did you add quotes?")
   }
 
   if (!is.null(size_state) && !is.numeric(size_state)) {
