@@ -24,7 +24,7 @@ ndr_states <- function(state = NULL) {
 
   ggplot2::map_data(
     naijR::map_ng(
-      naijR::states(state)
+      naijR::states(state), plot = FALSE
     )
   ) |>
     dplyr::rename(state = .data$region) |>

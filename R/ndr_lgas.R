@@ -29,7 +29,7 @@ ndr_lgas <- function(state = NULL) {
       dplyr::select(.data$lga, .data$state)
 
     ndr_lgas <- ggplot2::map_data(
-      naijR::map_ng(naijR::lgas())
+      naijR::map_ng(naijR::lgas(), plot = FALSE)
     )
   } else {
     st <- naijR::lgas_nigeria |>
@@ -39,7 +39,7 @@ ndr_lgas <- function(state = NULL) {
     ndr_lgas <- purrr::map(
       state,
       \(state) ggplot2::map_data(
-        naijR::map_ng(naijR::lgas(state))
+        naijR::map_ng(naijR::lgas(state), plot = FALSE)
       )
     ) |>
       purrr::list_rbind()
