@@ -113,7 +113,7 @@ plot_pyramid <- function(
       ggplot2::geom_text(
         ggplot2::aes(
           x = {{ fill }},
-          label = abs({{ fill }})
+          label = format_label(abs({{ fill }}))()
         ),
         hjust = "outward",
         size = size %||% 3,
@@ -127,7 +127,7 @@ plot_pyramid <- function(
       plot +
         ggplot2::theme_classic() +
         ggplot2::scale_x_continuous(
-          labels = scales::label_dollar(prefix = "", style_negative = "parens")
+          labels = format_axis()
         ) +
         ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
     )
@@ -135,7 +135,7 @@ plot_pyramid <- function(
     plot +
       ggplot2::theme_classic() +
       ggplot2::scale_x_continuous(
-        labels = scales::label_dollar(prefix = "", style_negative = "parens")
+        labels = format_axis()
       ) +
       ggplot2::scale_fill_manual(values = fill_colors %||% my_cols)
   }
