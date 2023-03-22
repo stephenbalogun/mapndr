@@ -105,3 +105,28 @@ validate_pyramid <- function(label, interactive, size, border, border_color, inv
     rlang::abort("The value supplied to the `inverse` argument is not a logical vector. Did you forget to write the word in capital letters?")
   }
 }
+
+
+format_axis <- function() {
+  function(x) {
+    ifelse(
+      abs(x) < 1 & abs(x) != 0L,
+      scales::percent_format(accuracy = 0.1, style_negative = "parens", zero.print = "0") (x),
+      scales::comma_format(style_negative = "parens", zero.print = "0") (x)
+    )
+  }
+}
+
+format_label <- function(x) {
+
+  force(x)
+
+  function() {
+    ifelse(
+      abs(x) < 1,
+      scales::percent_format(accuracy = 0.1, style_negative = "parens") (x),
+      scales::comma_format(style_negative = "parens") (x)
+    )
+  }
+}
+

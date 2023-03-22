@@ -52,11 +52,11 @@ map_lgas <- function(
 
   noise <- stats::runif(1, min = 0.01, max = 0.02)
 
-  validate_lga_maps(label_lga, label_fill, size_lga, size_fill, all_regions, interactive)
-
-  if (!is.null(fill_colors) && length(fill_colors) > 1 && length(fill_colors) != length(unique(fill_vec))) {
-    rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
-  }
+  # validate_lga_maps(label_lga, label_fill, size_lga, size_fill, all_regions, interactive)
+  #
+  # if (!is.null(fill_colors) && length(fill_colors) > 1 && length(fill_colors) != length(unique(fill_vec))) {
+  #   rlang::abort("The values supplied to `fill_colors` argument must be colors of length equal to the unique entries in the `fill` variable! Did you supply discrete colors to a continuous `fill` variable?")
+  # }
 
 
   if (all(unique(naijR::lgas_nigeria$state) %in% states) || all_regions) {
