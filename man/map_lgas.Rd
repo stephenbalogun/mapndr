@@ -21,6 +21,7 @@ map_lgas(
   gradient = NULL,
   grad_direction = NULL,
   na_fill = NULL,
+  range = NULL,
   all_regions = FALSE,
   interactive = FALSE
 )
@@ -57,6 +58,8 @@ map_lgas(
 \item{grad_direction, }{the gradient direction can be reversed by negating the current value. The default is `-1`. The reverse will take a value of `1`}
 
 \item{na_fill}{the fill color to be used for locations with missing value. The default is `pink`}
+
+\item{range}{minimum and maximum limits to be used when `fill` value is a continuous variable}
 
 \item{all_regions}{logical (boolean), indicating if the Nigeria LGAs should be used for the map}
 

@@ -32,6 +32,7 @@ map_states <- function(
     gradient = NULL,
     grad_direction = NULL,
     na_fill = NULL,
+    range = NULL,
     all_regions = FALSE,
     interactive = FALSE) {
   states <- dplyr::pull(.data, {{ state }}) |> unique()
@@ -140,7 +141,8 @@ map_states <- function(
       alpha = 0.5,
       option = gradient %||% "E",
       na.value = na_fill %||% off_white(),
-      direction = grad_direction %||% -1
+      direction = grad_direction %||% -1,
+      limits = range
     )
   }
 

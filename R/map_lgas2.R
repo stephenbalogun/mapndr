@@ -6,6 +6,7 @@
 #' @param label_bubble_color when supplied, this color will be used as font-color for the `bubble` label
 #' @param bubble_color a string of color. When this is supplied, it overides the default color
 #' @param size_bubble the font-size for the `bubble` labels in whole numbers. The default is 2
+#'
 #' @return a two-dimensional LGA-level map
 #' @export
 #'
@@ -37,6 +38,7 @@ map_lgas2 <- function(
     gradient = NULL,
     grad_direction = NULL,
     na_fill = NULL,
+    range = NULL,
     all_regions = FALSE,
     interactive = FALSE) {
   states <- dplyr::pull(.data, {{ state }}) |> unique()
@@ -181,7 +183,8 @@ map_lgas2 <- function(
         alpha = 0.5,
         option = gradient %||% "E",
         na.value = na_fill %||% off_white(),
-        direction = grad_direction %||% -1
+        direction = grad_direction %||% -1,
+        limits = range
       )
   }
 
